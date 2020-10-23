@@ -1,0 +1,52 @@
+@import url('https://fonts.googleapis.com/css2?family=Raleway&display=swap');
+
+.grey-box-bg {
+	background-color: rgb(100, 100, 100);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.btn-camagru {
+	background-color: #5D9FD4;
+}
+
+.btn-camagru:hover {
+	background-color: violet;
+}
+.btn-camagru:active {
+	background-color: rgb(238, 130, 130);
+}
+
+.logo:hover {
+	padding: 0%;
+	background-color: violet;
+	border-radius: 6%;
+}
+
+.nav-links {
+	/*font-family: 'Raleway', sans-serif;*/
+	font-family: 'Courier New', Courier, monospace;
+	list-style: none;
+	display: flex;
+}
+
+.nav-item a {
+	display: inline-block;
+	padding: 10px 15px;
+	text-decoration: none;
+	color: rgb(40, 40, 40);
+}
+
+.nav-item:hover {
+	background-color: violet;
+	border-radius: 6%;
+}
+
+.nav-item:hover a {
+	color: rgb(40, 40, 40);
+}
+
+.nav-item:active {
+	background-color: #5D9FD4;
+  }
