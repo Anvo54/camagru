@@ -1,9 +1,9 @@
 <?php require APPROOT . '/views/inc/header.php';?>
 <div class="container">
 	<div class="card card-body bg-light mt-4">
-		<div class="grey-box-bg" style="height: 25rem;">
-			<h3 class="display-4">Drag your file here!</h3>
-			<i>not done yet!</i>
+		<div class="grey-box-bg" style="height: 25rem;" id="drop_zone" ondrop="dropHandler(event);" ondragover="dragOverHandler(event);">
+			<h3>Drag your file here!</h3><br>
+			<a href="<?php echo URLROOT; ?>/contents/webcam" class="btn btn-success">Or use webcam</a>
 		</div>
 		<br>
 		<form action="<?php echo URLROOT;?>/contents/add" method="post">
@@ -28,4 +28,5 @@
 		</form>
 	</div>
 </div>
+<script src="<?php echo URLROOT; ?>/public/js/uploader.js"></script>
 <?php require APPROOT . '/views/inc/footer.php';?>

@@ -1,10 +1,14 @@
 <?php require APPROOT . '/views/inc/header.php';?>
 <br>
 <div class="container">
-	<div class="row mb-1">
+	<div class="row md-1">
+		<div class="col-md-12">
+		<?php if (isset($_SESSION['user_name'])) : ?>
 			<a href="<?php echo URLROOT;?>/contents/add" class="btn btn-primary float-right">
 				Add Image
 			</a>
+		<?php endif; ?>
+		</div>
 	</div>
 	<?php foreach($data['images'] as $image) : ?>
 		<div class="card card-body mb-3">
