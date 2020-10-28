@@ -38,8 +38,8 @@
 		/**	Get user by id */
 		public function getUserById($id)
 		{
-			$this->db->query('SELECT * FROM users WHERE id = :id');
-			$this->db->bind(':id', $id);
+			$this->db->query('SELECT * FROM users WHERE user_id = :user_id');
+			$this->db->bind(':user_id', $id);
 
 			$row =  $this->db->single();
 

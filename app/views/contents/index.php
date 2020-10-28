@@ -7,12 +7,13 @@
 			<a href="<?php echo URLROOT;?>/contents/add" class="btn btn-primary float-right">
 				Add Image
 			</a>
-		<?php endif; ?>
+			<?php endif; ?>
 		</div>
 	</div>
+	<br>
 	<?php foreach($data['images'] as $image) : ?>
 		<div class="card card-body mb-3">
-		<img src="<?php echo $image->image_path;?>" class="card-img-top mx-auto mb-3" style="width: auto; height: auto; max-height: 35rem;" alt="...">
+		<img src="<?php echo $image->image_path;?>" class="card-img-top mx-auto mb-3" style="width: auto; height: auto; max-height: 35rem;">
 			<h4 class="card-title">
 				<?php echo $image->image_title; ?>
 			</h4>
@@ -20,7 +21,7 @@
 					<div class="card-footer">
 			<small class="text-muted">This is a comment from random internet user</small>
 		</div>
-			<a href="<?php echo URLROOT; ?>/posts/show/<?php echo $image->image_id; ?>" class="btn btn-dark">More</a>
+			<a href="<?php echo URLROOT; ?>/contents/show/<?php echo $image->image_id; ?>" class="btn btn-dark">More</a>
 		</div>
 	<?php endforeach; ?>
 <?php require APPROOT . '/views/inc/footer.php';?>

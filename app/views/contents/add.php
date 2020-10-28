@@ -1,7 +1,7 @@
 <?php require APPROOT . '/views/inc/header.php';?>
 <div class="container">
 	<div class="card card-body bg-light mt-4">
-		<div class="grey-box-bg" style="height: 25rem;" id="drop_zone" ondrop="dropHandler(event);" ondragover="dragOverHandler(event);">
+		<div class="grey-box-bg" style="height: 25rem;">
 			<h3>Drag your file here!</h3><br>
 			<a href="<?php echo URLROOT; ?>/contents/webcam" class="btn btn-success">Or use webcam</a>
 		</div>

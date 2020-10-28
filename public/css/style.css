@@ -73,3 +73,15 @@
 	font-size: 16px;
 	width: 760px;
   }
+
+  #drop-area {
+	border: 2px dashed #ccc;
+	border-radius: 20px;
+	width: 480px;
+	font-family: sans-serif;
+	margin: 100px auto;
+	padding: 20px;
+  }
+  #drop-area.highlight {
+	border-color: purple;
+  }

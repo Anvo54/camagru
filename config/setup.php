@@ -43,7 +43,6 @@
 			<input type="checkbox" name="sample-data" value="false"> Install sample data?
 				<br>
 			<input type="submit" value="Install" class="btn btn-success">
-
 		</form>
 		</div>
 	</div>

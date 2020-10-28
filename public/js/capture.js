@@ -43,7 +43,7 @@
 		  streaming = true;
 		}
 	  }, false);
-
+	
 	savebutton.addEventListener('click', function(ev){
 		savepicture();
 		ev.preventDefault();
@@ -93,12 +93,7 @@
 		clearphoto();
 	  }
 
-	  const savepicture = () => {
-		  let name = document.getElementsByName('name');
-		  let description = document.getElementsByName('description');
 
-		  console.log(name, description);
-	  } 
 	}
 
 
