@@ -20,7 +20,7 @@
 		 public function __construct()
 		 {
 			/**	Set DSN	**/
-			$dsn = 'mysql:host='.$this->host.';dbname='.$this->dbname;
+			$dsn = 'mysql:host='.$this->host;
 			$options = array(
 				PDO::ATTR_PERSISTENT => true,
 				PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
@@ -28,6 +28,7 @@
 			/**	Try to connect to databese	**/
 			try {
 				$this->dbh = new PDO($dsn, $this->user, $this->pass, $options);
+				$this->dbh->query("CREATE DATABASE IF NOT EXISTS". $this->dbname);
 			} catch (PDOException $e) {
 				$this->error = $e->getMessage();
 				echo $this->error;

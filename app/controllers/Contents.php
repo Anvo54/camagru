@@ -104,12 +104,48 @@
 		{
 			$image = $this->galleryModel->getImageById($id);
 			$user = $this->userModel->getUserById($image->user_id);
+			$likes = $this->galleryModel->getLikeCount($id);
+			$liked = $this->galleryModel->checkUserLike(['image' => $id, 'user' => $user->user_id]);
 
 			$data = [
 				'image' => $image,
-				'user' => $user
+				'user' => $user,
+				'likes' => $likes,
+				'liked' => $liked
+			];
+			
+			$this->view('contents/show', $data);
+		}
+
+		public function like($id)
+		{
+			$data = [
+				'image' => $id,
+				'user' => trim($_SESSION['user_id'])
 			];
 
-			$this->view('contents/show', $data);
+			if ($this->galleryModel->checkUserLike($data)){
+				redirect('contents');
+			} else {
+				if ($this->galleryModel->likeImage($data)){
+					redirect('contents/show/'.$id);
+				} else {
+					die('Something went wrong!');
+				}
+			}
+		}
+
+		public function dislike($id)
+		{
+			$data = [
+				'image' => $id,
+				'user' => trim($_SESSION['user_id'])
+			];
+
+			if ($this->galleryModel->deleteLike($data)){
+				redirect('/contents/show/'.$id);
+			} else {
+				die('something went wrong');
+			}
 		}
 	}

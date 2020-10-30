@@ -13,7 +13,7 @@
 				<span class="invalid-feedback"><?php echo $data['title_err'];?></span>
 			</div>
 			<div class="form-group">
-				<label for="description">Descripion: <sup>*</sup> </label>
+				<label for="description">Description: <sup>*</sup> </label>
 				<input type="text" name="image_desc" class="form-control form-control-lg <?php echo (!empty($data['image_desc_err'])) ? 'is-invalid' : ''; ?>" value="<?php $data['image_desc'];?>" >
 				<span class="invalid-feedback"><?php echo $data['image_desc_err'];?></span>
 			</div>

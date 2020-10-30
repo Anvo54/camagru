@@ -1,4 +1,6 @@
 <?php
-	class Install {
-		
+	function setup(){
+		$db = new Database();
+
+		$db->query()
 	}
