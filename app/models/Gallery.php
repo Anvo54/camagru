@@ -32,6 +32,25 @@
 			return $result;
 		}
 
+		public function getLikes()
+		{
+			$this->db->query('SELECT * FROM image_likes');
+
+			$result = $this->db->resultSet();
+
+			return $result;
+		}
+
+		public function getComments($id)
+		{
+			$this->db->query('SELECT comment, users.user_name, id, created_at, comments.user_id FROM comments INNER JOIN users ON users.user_id = comments.user_id WHERE post_id = :post_id');
+			$this->db->bind(':post_id', $id);
+
+			$result = $this->db->resultSet();
+
+			return $result;
+		}
+
 		public function getImageById($id)
 		{
 			$this->db->query('SELECT * FROM images WHERE image_id = :image_id');
@@ -106,6 +125,18 @@
 			}
 		}
 
+		public function deleteComment($id)
+		{
+			$this->db->query('DELETE FROM comments WHERE id = :id');
+			$this->db->bind(':id', $id);
+
+			if ($this->db->execute()){
+				return true;
+			} else {
+				return false;
+			}
+		}
+
 		public function getLikeCount($id)
 		{
 			$this->db->query('SELECT * FROM image_likes WHERE image_id = :image_id');
@@ -113,5 +144,20 @@
 			$row = $this->db->single();
 			
 			return $this->db->rowCount();
+		}
+
+		public function addComment($data)
+		{
+			$this->db->query('INSERT INTO comments (comment, post_id, user_id) VALUES(:comment, :post_id, :user_id)');
+
+			$this->db->bind(':comment', $data['comment']);
+			$this->db->bind(':post_id', $data['post_id']);
+			$this->db->bind(':user_id', $data['user_id']);
+
+			if ($this->db->execute()){
+				return true;
+			} else {
+				return false;
+			}
 		}
 	}

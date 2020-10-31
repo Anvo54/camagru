@@ -131,6 +131,58 @@
 			return $data;
 		}
 
+		public function edit($id)
+		{
+			$user = $this->userModel->getUserById($id);
+
+			if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+				$_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+				
+				$data = [
+					'user_name' => trim($_POST['user_name']),
+					'email' => trim($_POST['email']),
+					'password' => trim($_POST['password']),
+					'new_password' => trim($_POST['new_password']),
+					'user_id' => $id
+				];
+				//** CREATE hashed new password AND Old password */
+				$data['new_password'] = password_hash($data['new_password'],PASSWORD_DEFAULT);
+				$loginSuccess = $this->userModel->login($_SESSION['user_name'], $data['password']);
+				if ($loginSuccess) {
+					if ($this->userModel->editUser($data)) {
+						$data = [
+							'user' => $user,
+							'success_message' => 'Password changed successfully!'
+						];
+						$this->view('users/edit', $data);
+					} else {
+						die('Something went wrong');
+					}
+				} else {
+					$data = [
+						'user' => $user,
+						'error_message' => 'Invalid password!'
+					];
+					$this->view('users/edit', $data);
+				}
+			} else {
+				$data = [
+					'user' => $user,
+					'message' => ''
+				];
+				$this->view('users/edit', $data);
+			}
+		}
+
+		public function delete($id)
+		{
+			if($this->userModel->deleteUser($id)) {
+				$this->logout();
+			} else {
+				die('User delete not successful');
+			}
+		}
+
 		public function createUserSession($user)
 		{
 			$_SESSION['user_id'] = $user->user_id;

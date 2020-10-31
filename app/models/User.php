@@ -21,6 +21,40 @@
 			}
 		}
 
+		public function editUser($data)
+		{
+			$this->db->query('UPDATE users SET user_name = :user_name, user_email = :user_email, password = :password WHERE user_id = :user_id');
+
+			$this->db->bind(':user_name', $data['user_name']);
+			$this->db->bind(':user_email', $data['email']);
+			$this->db->bind(':password', $data['new_password']);
+			$this->db->bind(':user_id', $data['user_id']);
+
+			if($this->db->execute()){
+				return true;
+			} else {
+				return false;
+			}
+		}
+
+		public function deleteUser($id)
+		{
+			/*** Proof of consept FIX THIS */
+
+			$this->db->query('DELETE FROM users WHERE user_id = :user_id');
+			$this->db->bind(':user_id', $id);
+			$this->db->execute();
+			$this->db->query('DELETE FROM image_likes WHERE user_id = :user_id');
+			$this->db->bind(':user_id', $id);
+			$this->db->execute();
+			$this->db->query('DELETE FROM comments WHERE user_id = :user_id');
+			$this->db->bind(':user_id', $id);
+			$this->db->execute();
+			$this->db->query('DELETE FROM images WHERE user_id = :user_id');
+			$this->db->bind(':user_id', $id);
+			$this->db->execute();
+			return(1);
+		}
 
 		public function findUserByUsername($user_name)
 		{

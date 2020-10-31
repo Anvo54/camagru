@@ -106,11 +106,13 @@
 			$user = $this->userModel->getUserById($image->user_id);
 			$likes = $this->galleryModel->getLikeCount($id);
 			$liked = $this->galleryModel->checkUserLike(['image' => $id, 'user' => $user->user_id]);
+			$comments = $this->galleryModel->getComments($id);
 
 			$data = [
 				'image' => $image,
 				'user' => $user,
 				'likes' => $likes,
+				'comments' => $comments,
 				'liked' => $liked
 			];
 			
@@ -146,6 +148,43 @@
 				redirect('/contents/show/'.$id);
 			} else {
 				die('something went wrong');
+			}
+		}
+
+		public function comment()
+		{
+			if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+	
+				$_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+				$data = [
+					'comment' => $_POST['comment'],
+					'post_id' => $_POST['post_id'],
+					'user_id' => trim($_SESSION['user_id']),
+					'comment_err' => ''
+				];
+
+				/** Create add comment */
+
+				if (empty($data['comment'])) {
+					$data['comment_err'] = "Comment can't be empty!";
+				}
+
+				if (empty($data['comment_err'])) {
+					if ($this->galleryModel->addComment($data)) {
+						redirect('/contents/show/'.$data['post_id']);
+					} else {
+						die('Something went wrong');
+					}
+				} else {
+					$this->view('contents/show/'.$data['post_id'], $data);
+				}
+			}
+		}
+
+		public function delcomment($id)
+		{
+			if ($this->galleryModel->deleteComment($id)){
+				redirect('/contents/show/'.$_POST['image_id']);
 			}
 		}
 	}

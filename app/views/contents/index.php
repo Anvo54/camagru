@@ -18,9 +18,6 @@
 				<?php echo $image->image_title; ?>
 			</h4>
 			<p class="card-text"><?php echo $image->image_desc; ?></p>
-					<div class="card-footer">
-			<small class="text-muted">This is a comment from random internet user</small>
-		</div>
 			<a href="<?php echo URLROOT; ?>/contents/show/<?php echo $image->image_id; ?>" class="btn btn-dark">More</a>
 		</div>
 	<?php endforeach; ?>
