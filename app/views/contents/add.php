@@ -1,5 +1,5 @@
 <?php require APPROOT . '/views/inc/header.php';?>
-<div class="container">
+<div class="container main">
 	<div class="card card-body bg-light mt-4">
 		<div class="grey-box-bg" style="height: 25rem;">
 			<h3>Drag your file here!</h3><br>

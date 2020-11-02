@@ -1,6 +1,6 @@
 <?php require APPROOT . '/views/inc/header.php';?>
 <br>
-<div class="container">
+<div class="container main">
 	<div class="row md-1">
 		<div class="col-md-12">
 		<?php if (isset($_SESSION['user_name'])) : ?>

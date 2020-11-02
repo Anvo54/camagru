@@ -82,11 +82,21 @@
 	margin: 100px auto;
 	padding: 20px;
   }
+
   #drop-area.highlight {
 	border-color: purple;
   }
 
+  .main {
+	min-height: 100%;
+	margin-bottom: 3vh;
+  }
+  .push {
+	height: 6vh;
+  }
+
   .footer {
+	padding-top: 5%;
 	bottom: 0;
 	position: fixed;
 	width: 100%;

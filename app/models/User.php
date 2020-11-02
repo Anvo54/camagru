@@ -39,8 +39,6 @@
 
 		public function deleteUser($id)
 		{
-			/*** Proof of consept FIX THIS */
-
 			$this->db->query('DELETE FROM users WHERE user_id = :user_id');
 			$this->db->bind(':user_id', $id);
 			$this->db->execute();

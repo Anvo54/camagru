@@ -1,6 +1,6 @@
 <?php require APPROOT . '/views/inc/header.php';?>
 <br>
-<div class="container">
+<div class="container main">
 	<div class="card card-body bg-light mt5">
 		<div class="row">
 			<div class="col camera">

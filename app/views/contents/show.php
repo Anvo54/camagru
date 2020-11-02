@@ -1,5 +1,5 @@
 <?php require APPROOT . '/views/inc/header.php';?>
-<div class="container">
+<div class="container main">
 	<a href="<?php echo URLROOT ?>/contents" class="btn btn-light">Back</a>
 	<hr>
 	<img class="card-img-top mx-auto mb-3" style="width: auto; height: auto; max-height: 35rem;" src="<?php echo $data['image']->image_path;?>">

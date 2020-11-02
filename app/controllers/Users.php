@@ -119,11 +119,21 @@
 			}
 			if (empty($data['email'])){
 				$data['email_err'] = 'Please insert valid email!';
+			} else if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
+				$data['email_err'] = 'Please insert valid email!';
 			}
+			
+			$uppercase = preg_match('@[A-Z]@', $data['password']);
+			$lowercase = preg_match('@[a-z]@', $data['password']);
+			$numbers = preg_match('@[0-9]@', $data['password']);
+			$specialChars = preg_match('@[^\w]@', $data['password']);
+
 			if (empty($data['password'])){
 				$data['password_err'] = 'Please insert valid password!';
 			} else if (strlen($data['password']) < 6) {
 				$data['password_err'] = 'Password has to be at least 6 characters!';
+			} else if (!$uppercase | !$lowercase | !$numbers | !$specialChars) {
+				$data['password_err'] = 'Password should include at least one special character, one number and one uppercase letter';
 			}
 			if (($data['confirm_password']) != $data['password']){
 				$data['password_err'] = "Passwords don't match!";
@@ -145,6 +155,18 @@
 					'new_password' => trim($_POST['new_password']),
 					'user_id' => $id
 				];
+				$uppercase = preg_match('@[A-Z]@', $data['new_password']);
+				$lowercase = preg_match('@[a-z]@', $data['new_password']);
+				$numbers = preg_match('@[0-9]@', $data['new_password']);
+				$specialChars = preg_match('@[^\w]@', $data['new_password']);
+				
+				if (!$uppercase | !$lowercase | !$numbers | !$specialChars) {
+					$data = [
+						'user' => $user,
+						'error_message' => 'Password should include at least one special character, one number and one uppercase letter'
+					];
+					$this->view('users/edit', $data);
+				} 
 				//** CREATE hashed new password AND Old password */
 				$data['new_password'] = password_hash($data['new_password'],PASSWORD_DEFAULT);
 				$loginSuccess = $this->userModel->login($_SESSION['user_name'], $data['password']);
