@@ -203,17 +203,19 @@
 			}
 		}
 
-		public function delcomment()
+		public function delcomment($id)
 		{
 			if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 				if (isLoggedIn() && $_POST['user_id'] == $_SESSION['user_id']) {
-					if ($this->galleryModel->deleteComment($_POST['image_id'])){
+					if ($this->galleryModel->deleteComment($id)){
 						redirect('contents/show/'.$_POST['image_id']);
 					}
 				} else {
 					redirect('contents/show');
 				}
+			} else {
+				redirect('contents/show');
 			}
 		}
 	}
