@@ -71,38 +71,48 @@
 
 		public function webcam()
 		{
-			if ($_SERVER['REQUEST_METHOD'] == 'POST'){
-				die(print_r($_POST));
+			if (isLoggedIn()){
+				if ($_SERVER['REQUEST_METHOD'] == 'POST'){
+					die(print_r($_POST));
+				}
+				$data = [
+					'name' => '',
+					'name_err' => '',
+					'description' => '',
+					'description_err' => ''
+				];
+				$this->view('contents/webcam', $data);
+			} else {
+				redirect('users/login');
 			}
-			$data = [
-				'name' => '',
-				'name_err' => '',
-				'description' => '',
-				'description_err' => ''
-			];
-			$this->view('contents/webcam', $data);
 		}
 
 		public function delete($id)
 		{
-			if ($_SERVER['REQUEST_METHOD'] == 'POST'){
-				$image = $this->galleryModel->getImageById($id);
-				if ($image->user_id != $_SESSION['user_id']) {
-					redirect('contents');
-				}
-				if ($this->galleryModel->deleteImage($id)){
-					redirect('contents');
+			if (isLoggedIn()){
+				if ($_SERVER['REQUEST_METHOD'] == 'POST'){
+					$image = $this->galleryModel->getImageById($id);
+					if ($image->user_id != $_SESSION['user_id']) {
+						redirect('contents');
+					}
+					if ($this->galleryModel->deleteImage($id)){
+						redirect('contents');
+					} else {
+						die('Something went wrong');
+					}
 				} else {
-					die('Something went wrong');
+					redirect('contents');
 				}
 			} else {
-				redirect('contents');
+				redirect('users/login');
 			}
 		}
 
 		public function show($id)
 		{
-			$image = $this->galleryModel->getImageById($id);
+			if (empty($image = $this->galleryModel->getImageById($id))) {
+				redirect('contents');
+			}
 			$user = $this->userModel->getUserById($image->user_id);
 			$likes = $this->galleryModel->getLikeCount($id);
 			$liked = $this->galleryModel->checkUserLike(['image' => $id, 'user' => $user->user_id]);
@@ -121,70 +131,89 @@
 
 		public function like($id)
 		{
-			$data = [
-				'image' => $id,
-				'user' => trim($_SESSION['user_id'])
-			];
-
-			if ($this->galleryModel->checkUserLike($data)){
-				redirect('contents');
-			} else {
-				if ($this->galleryModel->likeImage($data)){
-					redirect('contents/show/'.$id);
+			if (isLoggedIn()) {
+				$data = [
+					'image' => $id,
+					'user' => trim($_SESSION['user_id'])
+				];
+	
+				if ($this->galleryModel->checkUserLike($data)){
+					redirect('contents');
 				} else {
-					die('Something went wrong!');
+					if ($this->galleryModel->likeImage($data)){
+						redirect('contents/show/'.$id);
+					} else {
+						die('Something went wrong!');
+					}
 				}
+			} else {
+				redirect('contents/show/'.$id);
 			}
 		}
 
 		public function dislike($id)
 		{
-			$data = [
-				'image' => $id,
-				'user' => trim($_SESSION['user_id'])
-			];
-
-			if ($this->galleryModel->deleteLike($data)){
-				redirect('/contents/show/'.$id);
+			if (isLoggedIn()) {
+				$data = [
+					'image' => $id,
+					'user' => trim($_SESSION['user_id'])
+				];
+	
+				if ($this->galleryModel->deleteLike($data)){
+					redirect('contents/show/'.$id);
+				} else {
+					die('something went wrong');
+				}
 			} else {
-				die('something went wrong');
+				redirect('contents/show/'.$id);
 			}
 		}
 
 		public function comment()
 		{
-			if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+			if (isLoggedIn()) {
+				if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+		
+					$_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+					$data = [
+						'comment' => $_POST['comment'],
+						'post_id' => $_POST['post_id'],
+						'user_id' => trim($_SESSION['user_id']),
+						'comment_err' => ''
+					];
 	
-				$_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
-				$data = [
-					'comment' => $_POST['comment'],
-					'post_id' => $_POST['post_id'],
-					'user_id' => trim($_SESSION['user_id']),
-					'comment_err' => ''
-				];
-
-				/** Create add comment */
-
-				if (empty($data['comment'])) {
-					$data['comment_err'] = "Comment can't be empty!";
-				}
-
-				if (empty($data['comment_err'])) {
-					if ($this->galleryModel->addComment($data)) {
-						redirect('/contents/show/'.$data['post_id']);
-					} else {
-						die('Something went wrong');
+					/** Create add comment */
+	
+					if (empty($data['comment'])) {
+						$data['comment_err'] = "Comment can't be empty!";
 					}
-				} else {
-					$this->view('contents/show/'.$data['post_id'], $data);
+	
+					if (empty($data['comment_err'])) {
+						if ($this->galleryModel->addComment($data)) {
+							redirect('/contents/show/'.$data['post_id']);
+						} else {
+							die('Something went wrong');
+						}
+					} else {
+						$this->view('contents/show/'.$data['post_id'], $data);
+					}
 				}
+			} else {
+				redirect('contents');
 			}
 		}
 
-		public function delcomment($id)
+		public function delcomment()
 		{
-			if ($this->galleryModel->deleteComment($id)){
-				redirect('/contents/show/'.$_POST['image_id']);
+			if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+				if (isLoggedIn() && $_POST['user_id'] == $_SESSION['user_id']) {
+					if ($this->galleryModel->deleteComment($_POST['image_id'])){
+						redirect('contents/show/'.$_POST['image_id']);
+					}
+				} else {
+					redirect('contents/show');
+				}
 			}
 		}
 	}

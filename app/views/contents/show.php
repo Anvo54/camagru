@@ -1,5 +1,5 @@
 <?php require APPROOT . '/views/inc/header.php';?>
-<div class="container main">
+<div class="container">
 	<a href="<?php echo URLROOT ?>/contents" class="btn btn-light">Back</a>
 	<hr>
 	<img class="card-img-top mx-auto mb-3" style="width: auto; height: auto; max-height: 35rem;" src="<?php echo $data['image']->image_path;?>">
@@ -29,6 +29,7 @@
 				<div class="row float-right">
 					<form action="<?php echo URLROOT ?>/contents/delcomment/<?php echo $comment->id; ?>" method="post">
 						<input type="hidden" name="image_id" value="<?php echo $data['image']->image_id; ?>">
+						<input type="hidden" name="user_id" value="<?php echo $data['user']->user_id; ?>">
 						<input type="submit" value="Delete" class="btn btn-danger btn-sm">
 					</form>
 				</div>

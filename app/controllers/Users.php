@@ -143,65 +143,76 @@
 
 		public function edit($id)
 		{
-			$user = $this->userModel->getUserById($id);
-
-			if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-				$_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
-				
-				$data = [
-					'user_name' => trim($_POST['user_name']),
-					'email' => trim($_POST['email']),
-					'password' => trim($_POST['password']),
-					'new_password' => trim($_POST['new_password']),
-					'user_id' => $id
-				];
-				$uppercase = preg_match('@[A-Z]@', $data['new_password']);
-				$lowercase = preg_match('@[a-z]@', $data['new_password']);
-				$numbers = preg_match('@[0-9]@', $data['new_password']);
-				$specialChars = preg_match('@[^\w]@', $data['new_password']);
-				
-				if (!$uppercase | !$lowercase | !$numbers | !$specialChars) {
+			if (isLoggedIn()){
+				if ($id != $_SESSION['user_id']) {
+					$id = $_SESSION['user_id'];
+				}
+				$user = $this->userModel->getUserById($id);
+	
+				if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+					$_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+					
 					$data = [
-						'user' => $user,
-						'error_message' => 'Password should include at least one special character, one number and one uppercase letter'
+						'user_name' => trim($_POST['user_name']),
+						'email' => trim($_POST['email']),
+						'password' => trim($_POST['password']),
+						'new_password' => trim($_POST['new_password']),
+						'user_id' => $id
 					];
-					$this->view('users/edit', $data);
-				} 
-				//** CREATE hashed new password AND Old password */
-				$data['new_password'] = password_hash($data['new_password'],PASSWORD_DEFAULT);
-				$loginSuccess = $this->userModel->login($_SESSION['user_name'], $data['password']);
-				if ($loginSuccess) {
-					if ($this->userModel->editUser($data)) {
+					$uppercase = preg_match('@[A-Z]@', $data['new_password']);
+					$lowercase = preg_match('@[a-z]@', $data['new_password']);
+					$numbers = preg_match('@[0-9]@', $data['new_password']);
+					$specialChars = preg_match('@[^\w]@', $data['new_password']);
+	
+					if (!$uppercase | !$lowercase | !$numbers | !$specialChars) {
 						$data = [
 							'user' => $user,
-							'success_message' => 'Password changed successfully!'
+							'error_message' => 'Password should include at least one special character, one number and one uppercase letter'
 						];
 						$this->view('users/edit', $data);
+					} 
+					//** CREATE hashed new password AND Old password */
+					$data['new_password'] = password_hash($data['new_password'],PASSWORD_DEFAULT);
+					$loginSuccess = $this->userModel->login($_SESSION['user_name'], $data['password']);
+					if ($loginSuccess) {
+						if ($this->userModel->editUser($data)) {
+							$data = [
+								'user' => $user,
+								'success_message' => 'Password changed successfully!'
+							];
+							$this->view('users/edit', $data);
+						} else {
+							die('Something went wrong');
+						}
 					} else {
-						die('Something went wrong');
+						$data = [
+							'user' => $user,
+							'error_message' => 'Invalid password!'
+						];
+						$this->view('users/edit', $data);
 					}
 				} else {
 					$data = [
 						'user' => $user,
-						'error_message' => 'Invalid password!'
+						'message' => ''
 					];
 					$this->view('users/edit', $data);
 				}
 			} else {
-				$data = [
-					'user' => $user,
-					'message' => ''
-				];
-				$this->view('users/edit', $data);
+				redirect('users/login');
 			}
 		}
 
 		public function delete($id)
 		{
-			if($this->userModel->deleteUser($id)) {
-				$this->logout();
+			if (isLoggedIn() && $_SESSION['user_id'] == $id) {
+				if($this->userModel->deleteUser($id)) {
+					$this->logout();
+				} else {
+					die('User delete not successful');
+				}
 			} else {
-				die('User delete not successful');
+				redirect('users/login');
 			}
 		}
 
@@ -217,5 +228,101 @@
 			unset($_SESSION['user_name']);
 			session_destroy();
 			redirect('user/login');
+		}
+
+		public function forgot()
+		{
+			if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+				
+				$_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+			
+				$data = [
+					'user_name' => trim($_POST['user_name']),
+					'link' => ''
+				];
+				
+				if (empty($data['user_name'])) {
+					$data['name_err'] = "Insert username";
+				}
+
+				if (!$this->userModel->findUserByUsername($data['user_name'])) {
+					$data['name_err'] = 'No user found';
+				}
+
+				if (empty($data['name_err'])) {
+					$data['link'] = uniqid("", true);
+					if ($this->userModel->addLink($data)) {
+						//mail()
+						redirect('users/login');
+					} else {
+						die('Something went wrong');
+					}
+				} else {
+					$this->view('/users/forgot', $data);
+				}
+				
+			}
+			$data = [
+				'user_name' => ''
+			];
+			$this->view('/users/forgot', $data);
+		}
+
+		public function reset($id)
+		{
+			$user = $this->userModel->getUserByUniqueLink($id);
+			$data = [
+				'link' => $id,
+				'user' => $user,
+				'password' => '',
+				'password_err' => '',
+				'confirm_password' => '',
+				'password_err' => ''
+			];
+
+
+			if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+				$_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+
+				$data['password'] = trim($_POST['password']);
+				$data['confirm_password'] = trim($_POST['confirm_password']);
+
+
+				$uppercase = preg_match('@[A-Z]@', $data['password']);
+				$lowercase = preg_match('@[a-z]@', $data['password']);
+				$numbers = preg_match('@[0-9]@', $data['password']);
+				$specialChars = preg_match('@[^\w]@', $data['password']);
+				
+				if ($data['password'] != $data['confirm_password']) {
+					$data['password_err'] = "Passwords don't match";
+				}
+
+				if (!$uppercase | !$lowercase | !$numbers | !$specialChars) {
+					$data['password_err'] = 'Password should include at least one special character, one number and one uppercase letter';
+				}
+				if (empty($data['password_err'])){
+					$data['password'] = password_hash($data['password'],PASSWORD_DEFAULT);
+					if ($this->userModel->resetPassword($data))
+					{
+						$this->userModel->removeLink($data);
+						redirect('users/login');
+					} else {
+						die('Something went wrong');
+					}
+				}
+				
+			}
+			$data = [
+				'link' => $id,
+				'user' => $user,
+				'password' => '',
+				'password_err' => '',
+				'confirm_password' => '',
+				'password_err' => ''
+			];
+			if (empty($data['user'])){
+				redirect('');
+			}
+			$this->view('users/reset', $data);
 		}
 	}

@@ -1,21 +1,13 @@
-<?php 
-	define('DB_HOST', 'localhost');
-	define('DB_USER', 'root');
-	define('DB_PASS', 'password');
-	define('DB_NAME', 'camagru');
-
-	include 'database.php';
+<?php
+	require 'config.php';
+	//require 'database.php';
+	require '../app/libraries/Database.php';
+	
 	$db = new Database();
 
-	
-	$db->query('SELECT * FROM users');
-	$r = $db->resultSet();
 
-
-
-	function install($r){
-/** */
-	}
+	$db->query('CREATE TABLE `users` ( `user_id` INT NOT NULL AUTO_INCREMENT , `user_name` VARCHAR(32) NOT NULL , `user_email` VARCHAR(64) NOT NULL , `password` VARCHAR(255) NOT NULL , PRIMARY KEY (`user_id`))');
+	$db->execute();
 
 
 ?>

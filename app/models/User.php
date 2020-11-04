@@ -67,11 +67,61 @@
 				return false;
 			}
 		}
+
+		public function addLink($data)
+		{
+			$this->db->query('UPDATE users SET link = :link WHERE user_name = :user_name');
+			$this->db->bind(':link', $data['link']);
+			$this->db->bind(':user_name', $data['user_name']);
+
+			if ($this->db->execute()){
+				return true;
+			} else {
+				return false;
+			}
+		}
+
+		public function removeLink($data)
+		{
+			$this->db->query('UPDATE users SET link = :link WHERE user_name = :user_name');
+			$this->db->bind(':link', null);
+			$this->db->bind(':user_name', $data['user']->user_name);
+
+			if ($this->db->execute()){
+				return true;
+			} else {
+				return false;
+			}
+		}
+
+		public function resetPassword($data)
+		{
+			$this->db->query('UPDATE users SET password = :password WHERE user_name = :user_name');
+			$this->db->bind(':password', $data['password']);
+			$this->db->bind(':user_name', $data['user']->user_name);
+
+			if ($this->db->execute()){
+				return true;
+			} else {
+				return false;
+			}
+		}
+
 		/**	Get user by id */
 		public function getUserById($id)
 		{
 			$this->db->query('SELECT * FROM users WHERE user_id = :user_id');
 			$this->db->bind(':user_id', $id);
+
+			$row =  $this->db->single();
+
+			return $row;
+		}
+
+		public function getUserByUniqueLink($link)
+		{
+			$this->db->query('SELECT user_name FROM users WHERE link = :link');
+			$this->db->bind(':link', $link);
 
 			$row =  $this->db->single();
 
