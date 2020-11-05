@@ -1,13 +1,10 @@
 <?php
+	ini_set('display_errors', 1);
+	ini_set('display_startup_errors', 1);
+	error_reporting(E_ALL);
 	require 'config.php';
-	//require 'database.php';
 	require '../app/libraries/Database.php';
-	
-	$db = new Database();
-
-
-	$db->query('CREATE TABLE `users` ( `user_id` INT NOT NULL AUTO_INCREMENT , `user_name` VARCHAR(32) NOT NULL , `user_email` VARCHAR(64) NOT NULL , `password` VARCHAR(255) NOT NULL , PRIMARY KEY (`user_id`))');
-	$db->execute();
+	require 'install.php';
 
 
 ?>
@@ -30,7 +27,7 @@
 			<h3>Welcome to Camagru install wizard</h3>
 			<br>
 			<p class="alert alert-danger">THIS SCRIPT WILL REMOVE ALL PREVIOUS DATA FROM CAMAGRU DATABASE</p>
-			<form action="" method="post">
+			<form action="install.php" method="post">
 			
 			<input type="checkbox" name="sample-data" value="false"> Install sample data?
 				<br>

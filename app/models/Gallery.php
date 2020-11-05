@@ -102,7 +102,7 @@
 			$this->db->query('SELECT image_id FROM image_likes WHERE user_id = :user_id AND image_id = :image_id');
 			$this->db->bind(':image_id', $data['image']);
 			$this->db->bind(':user_id', $data['user']);
-
+			
 			$row = $this->db->single();
 
 			if (isset($row->image_id) && $row->image_id == $data['image']) {

@@ -115,7 +115,7 @@
 			}
 			$user = $this->userModel->getUserById($image->user_id);
 			$likes = $this->galleryModel->getLikeCount($id);
-			$liked = $this->galleryModel->checkUserLike(['image' => $id, 'user' => $user->user_id]);
+			$liked = $this->galleryModel->checkUserLike(['image' => $id, 'user' => $_SESSION['user_id']]);
 			$comments = $this->galleryModel->getComments($id);
 
 			$data = [
@@ -125,7 +125,6 @@
 				'comments' => $comments,
 				'liked' => $liked
 			];
-			
 			$this->view('contents/show', $data);
 		}
 
@@ -138,7 +137,7 @@
 				];
 	
 				if ($this->galleryModel->checkUserLike($data)){
-					redirect('contents');
+					redirect('contents/show/'.$id);
 				} else {
 					if ($this->galleryModel->likeImage($data)){
 						redirect('contents/show/'.$id);
