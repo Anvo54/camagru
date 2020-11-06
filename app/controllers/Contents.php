@@ -115,7 +115,7 @@
 			}
 			$user = $this->userModel->getUserById($image->user_id);
 			$likes = $this->galleryModel->getLikeCount($id);
-			$liked = $this->galleryModel->checkUserLike(['image' => $id, 'user' => $_SESSION['user_id']]);
+			$liked = (isLoggedIn()) ? $this->galleryModel->checkUserLike(['image' => $id, 'user' => $_SESSION['user_id']]) : 0;
 			$comments = $this->galleryModel->getComments($id);
 
 			$data = [
