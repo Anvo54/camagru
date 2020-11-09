@@ -334,11 +334,11 @@
 		{
 			if (!isLoggedIn()){
 				$user = $this->userModel->getUserByUniqueLink($link);
-				if ($this->userModel->verifyUser($user)) {
+				if ($user && $this->userModel->verifyUser($user)) {
 					$this->userModel->removeLink(['user' => $user]);
 					redirect('users/login');
 				} else {
-					die('Something went wrong');
+					redirect('users/register');
 				}
 			}
 		}
