@@ -156,14 +156,25 @@
 	
 				if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 					$_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
-					
+
 					$data = [
 						'user_name' => trim($_POST['user_name']),
 						'email' => trim($_POST['email']),
 						'password' => trim($_POST['password']),
 						'new_password' => trim($_POST['new_password']),
+						'like_email' => (isset($_POST['like_email']) && $_POST['like_email'] == "true" ? true : false),
+						'comment_email' => (isset($_POST['comment_email']) && $_POST['comment_email']  == "true" ? true : false),
 						'user_id' => $id
 					];
+
+					if ($this->userModel->findUserByUsername($data['user_name']) && $data['user_name'] != $_SESSION['user_name']) {
+						$data = [
+							'user' => $user,
+							'error_message' => 'Username already taken!'
+						];
+						$this->view('users/edit', $data);
+					}
+
 					$uppercase = preg_match('@[A-Z]@', $data['new_password']);
 					$lowercase = preg_match('@[a-z]@', $data['new_password']);
 					$numbers = preg_match('@[0-9]@', $data['new_password']);
@@ -183,7 +194,7 @@
 						if ($this->userModel->editUser($data)) {
 							$data = [
 								'user' => $user,
-								'success_message' => 'Password changed successfully!'
+								'success_message' => 'Account preferences changed successfully!'
 							];
 							$this->view('users/edit', $data);
 						} else {

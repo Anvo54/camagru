@@ -27,6 +27,18 @@
 					<label for="confirm_password">New Password: <sup>*</sup> </label>
 					<input type="password" name="new_password" class="form-control form-control-lg" required minlength="6">
 				</div>
+				<div class="form-group">
+					<div class="row">
+						<div class="col">
+							<label for="confirm_password">Like Notifications</label><br>
+							<input type="checkbox" name="like_email" value="true" <?php if ($data['user']->like_email == "1") echo "checked"?>>
+						</div>
+						<div class="col">
+						<label for="confirm_password">Comment Notifications</label><br>
+							<input type="checkbox" name="comment_email" value="true" <?php if ($data['user']->comment_email == "1") echo "checked"?>>
+						</div>
+					</div>
+				</div>
 				<div class="row">
 					<div class="col">
 						<input type="submit" value="Edit" class="btn btn-success btn-block">

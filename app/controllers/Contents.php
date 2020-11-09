@@ -141,7 +141,9 @@
 				} else {
 					if ($this->galleryModel->likeImage($data)){
 						$user = $this->userModel->getImageOwner($id);
-						sendNotificationMail($user->user_email, $id, "Like");
+						if($user->like_email) {
+							sendNotificationMail($user->user_email, $id, "Like");
+						}
 						redirect('contents/show/'.$id);
 					} else {
 						die('Something went wrong!');
@@ -192,7 +194,9 @@
 					if (empty($data['comment_err'])) {
 						if ($this->galleryModel->addComment($data)) {
 							$user = $this->userModel->getImageOwner($data['post_id']);
-							sendNotificationMail($user->user_email, $data['post_id'], "Comment");
+							if($user->like_comment) {
+								sendNotificationMail($user->user_email, $data['post_id'], "Comment");
+							}
 							redirect('/contents/show/'.$data['post_id']);
 						} else {
 							die('Something went wrong');

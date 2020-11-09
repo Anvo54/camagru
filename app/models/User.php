@@ -8,7 +8,8 @@
 
 		public function RegisterUser($data)
 		{
-			$this->db->query('INSERT INTO users (user_name, user_email, password, link, verified) values (:user_name, :user_email, :password, :link, false)');
+			$this->db->query('INSERT INTO users (user_name, user_email, password, link, verified, like_email, comment_email) 
+			values (:user_name, :user_email, :password, :link, false, true, true)');
 
 			$this->db->bind(':user_name', $data['user_name']);
 			$this->db->bind(':user_email', $data['email']);
@@ -24,12 +25,14 @@
 
 		public function editUser($data)
 		{
-			$this->db->query('UPDATE users SET user_name = :user_name, user_email = :user_email, password = :password WHERE user_id = :user_id');
+			$this->db->query('UPDATE users SET user_name = :user_name, user_email = :user_email, password = :password, like_email = :like_email, comment_email = :comment_email WHERE user_id = :user_id');
 
 			$this->db->bind(':user_name', $data['user_name']);
 			$this->db->bind(':user_email', $data['email']);
 			$this->db->bind(':password', $data['new_password']);
 			$this->db->bind(':user_id', $data['user_id']);
+			$this->db->bind(':like_email', $data['like_email']);
+			$this->db->bind(':comment_email', $data['comment_email']);
 
 			if($this->db->execute()){
 				return true;
@@ -172,7 +175,7 @@
 
 		public function getImageOwner($id)
 		{
-			$this->db->query('SELECT image_id, users.user_email FROM images INNER JOIN users ON users.user_id = images.user_id WHERE image_id = :image_id');
+			$this->db->query('SELECT image_id, users.user_email, users.like_email, users.comment_email FROM images INNER JOIN users ON users.user_id = images.user_id WHERE image_id = :image_id');
 			$this->db->bind(':image_id', $id);
 
 			$result = $this->db->single();
