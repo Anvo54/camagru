@@ -8,11 +8,12 @@
 
 		public function RegisterUser($data)
 		{
-			$this->db->query('INSERT INTO users (user_name, user_email, password) values (:user_name, :user_email, :password)');
+			$this->db->query('INSERT INTO users (user_name, user_email, password, link, verified) values (:user_name, :user_email, :password, :link, false)');
 
 			$this->db->bind(':user_name', $data['user_name']);
 			$this->db->bind(':user_email', $data['email']);
 			$this->db->bind(':password', $data['password']);
+			$this->db->bind(':link', $data['link']);
 
 			if($this->db->execute()){
 				return true;
@@ -101,6 +102,32 @@
 			$this->db->bind(':user_name', $data['user']->user_name);
 
 			if ($this->db->execute()){
+				return true;
+			} else {
+				return false;
+			}
+		}
+
+		public function verifyUser($data)
+		{
+			$this->db->query('UPDATE users SET verified = true WHERE user_name = :user_name');
+			$this->db->bind(':user_name', $data->user_name);
+
+			if ($this->db->execute()){
+				return true;
+			} else {
+				return false;
+			}
+		}
+
+		public function isVerified($data)
+		{
+			$this->db->query('SELECT verified FROM users WHERE user_name = :user_name');
+			$this->db->bind(':user_name', $data['user_name']);
+
+			$row =  $this->db->single();
+
+			if ($row == "1") {
 				return true;
 			} else {
 				return false;

@@ -30,6 +30,7 @@
 					'email' => trim($_POST['email']),
 					'password' => trim($_POST['password']),
 					'confirm_password' => trim($_POST['confirm_password']),
+					'link' => uniqid("", true),
 					'name_err' => '',
 					'email_err' => '',
 					'password_err' => '',
@@ -41,7 +42,7 @@
 
 					$data['password'] = password_hash($data['password'],PASSWORD_DEFAULT);
 					if ($this->userModel->registerUser($data)){
-						mail($data['email'], 'Confirm account', 'Confirm me');
+						sendVerificationMail($data['email'], $data['user_name'], $data['link']);
 						redirect('users/login');
 					} else {
 						die('Something went wrong');
@@ -76,7 +77,11 @@
 					'name_err' => '',
 					'password_err' => '',
 				];
-				
+
+				if (!$this->userModel->isVerified($data)){
+					$data['name_err'] = 'Please verify your account before login!';
+				}
+
 				if (empty($data['user_name'])) {
 					$data['name_err'] = "Insert username";
 				}
@@ -252,7 +257,6 @@
 				if (empty($data['name_err'])) {
 					$data['link'] = uniqid("", true);
 					if ($this->userModel->addLink($data)) {
-						//mail()
 						redirect('users/login');
 					} else {
 						die('Something went wrong');
@@ -324,5 +328,18 @@
 				redirect('');
 			}
 			$this->view('users/reset', $data);
+		}
+
+		public function verify($link)
+		{
+			if (!isLoggedIn()){
+				$user = $this->userModel->getUserByUniqueLink($link);
+				if ($this->userModel->verifyUser($user)) {
+					$this->userModel->removeLink(['user' => $user]);
+					redirect('users/login');
+				} else {
+					die('Something went wrong');
+				}
+			}
 		}
 	}
