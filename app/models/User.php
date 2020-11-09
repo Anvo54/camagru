@@ -127,7 +127,7 @@
 
 			$row =  $this->db->single();
 
-			if ($row == "1") {
+			if ($row) {
 				return true;
 			} else {
 				return false;
@@ -168,5 +168,14 @@
 			} else {
 				return false;
 			}
+		}
+
+		public function getImageOwner($id)
+		{
+			$this->db->query('SELECT image_id, users.user_email FROM images INNER JOIN users ON users.user_id = images.user_id WHERE image_id = :image_id');
+			$this->db->bind(':image_id', $id);
+
+			$result = $this->db->single();
+			return $result;
 		}
 	}

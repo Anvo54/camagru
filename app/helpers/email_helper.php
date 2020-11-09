@@ -13,14 +13,32 @@
 		</body>
 		</html>
 		';
-		
-		// To send HTML mail, the Content-type header must be set
+
 		$headers  = 'MIME-Version: 1.0' . "\r\n";
 		$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-		
-		// Additional headers
 		$headers .= 'From: Camagru <no-reply@camagru.com>' . "\r\n";
 
 		mail($address,$subject,$message, $headers);
+	}
 
+	function sendNotificationMail($address, $id, $type) {
+		$subject = "New ".$type;
+		$message = '
+		<html>
+		<head>You have a new '.strtolower($type).'!</title>
+		</head>
+		<body>
+			<h1>You have a new '.strtolower($type).'!</h1>
+			<br>
+			<p>Your post just got a new '.strtolower($type).'. Click <a href="'.URLROOT."/contents/show/".$id.'">Here</a> to see it!</p>
+		</body>
+		</html>
+		';
+		
+
+		$headers  = 'MIME-Version: 1.0' . "\r\n";
+		$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+		$headers .= 'From: Camagru <no-reply@camagru.com>' . "\r\n";
+
+		mail($address,$subject,$message, $headers);
 	}
