@@ -38,7 +38,7 @@
 				];
 				$data = $this->validateUserData($data);
 
-				if (empty($data['email_err']) && empty($data['name_err']) && empty($data['password_err'])){
+				if (empty($data['email_err']) && empty($data['name_err']) && empty($data['password_err']) && empty($data['confirm_password_err'])){
 
 					$data['password'] = password_hash($data['password'],PASSWORD_DEFAULT);
 					if ($this->userModel->registerUser($data)){
@@ -127,7 +127,7 @@
 			} else if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
 				$data['email_err'] = 'Please insert valid email!';
 			}
-			
+
 			$uppercase = preg_match('@[A-Z]@', $data['password']);
 			$lowercase = preg_match('@[a-z]@', $data['password']);
 			$numbers = preg_match('@[0-9]@', $data['password']);
@@ -141,8 +141,9 @@
 				$data['password_err'] = 'Password should include at least one special character, one number and one uppercase letter';
 			}
 			if (($data['confirm_password']) != $data['password']){
-				$data['password_err'] = "Passwords don't match!";
+				$data['confirm_password_err'] = "Passwords don't match!";
 			}
+
 			return $data;
 		}
 
@@ -347,7 +348,7 @@
 				$user = $this->userModel->getUserByUniqueLink($link);
 				if ($user && $this->userModel->verifyUser($user)) {
 					$this->userModel->removeLink(['user' => $user]);
-					redirect('users/login');
+					$this->view('/users/verify', []);
 				} else {
 					redirect('users/register');
 				}
