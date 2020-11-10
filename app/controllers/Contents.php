@@ -73,7 +73,21 @@
 		{
 			if (isLoggedIn()){
 				if ($_SERVER['REQUEST_METHOD'] == 'POST'){
-					die(print_r($_POST));
+					$data = [
+						'image' => $_POST['photo'],
+						'image_title' => $_POST['image_title'],
+						'image_desc' => trim($_POST['image_desc']),
+						'image_path' => '',
+						'user_id' => trim($_SESSION['user_id']),
+					];
+					$data['image_path'] = URLROOT.'/public/img/'.$data['image_title'].mktime().'.png';
+					if ($this->galleryModel->addImage($data)){
+						$img = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $data['image']));
+						file_put_contents('public/img/'.$data['image_title'].mktime().'.png', $img);
+						redirect('contents/gallery');
+					} else {
+						die('Something went wrong!');
+					}
 				}
 				$data = [
 					'name' => '',
@@ -96,6 +110,8 @@
 						redirect('contents');
 					}
 					if ($this->galleryModel->deleteImage($id)){
+						$path = explode('http://localhost:8080/camagru/',$image->image_path);
+						unlink($path[1], null);
 						redirect('contents');
 					} else {
 						die('Something went wrong');

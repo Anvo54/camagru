@@ -25,7 +25,7 @@
 
 		public function getImages()
 		{
-			$this->db->query('SELECT * FROM images');
+			$this->db->query('SELECT * FROM images ORDER BY created_at DESC');
 
 			$result = $this->db->resultSet();
 

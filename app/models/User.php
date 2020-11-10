@@ -181,4 +181,13 @@
 			$result = $this->db->single();
 			return $result;
 		}
+
+		public function getUserEmail($user_name)
+		{
+			$this->db->query('SELECT user_email FROM users WHERE user_name = :user_name');
+			$this->db->bind(':user_name', $user_name);
+			
+			$result = $this->db->single();
+			return $result;
+		}
 	}

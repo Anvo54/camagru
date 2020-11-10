@@ -43,12 +43,7 @@
 		  streaming = true;
 		}
 	  }, false);
-	
-	savebutton.addEventListener('click', function(ev){
-		savepicture();
-		ev.preventDefault();
-	}, false);
-	
+
   
 	  startbutton.addEventListener('click', function(ev){
 		takepicture();
@@ -75,7 +70,9 @@
 	  
 		var data = canvas.toDataURL('image/png');
 		photo.setAttribute('src', data);
+
 		
+
 		if (video.style.display === 'none'){
 			video.style.display = 'block';
 		} else 
@@ -84,16 +81,15 @@
 			photo.style.display = 'block';
 			startbutton.className = 'btn btn-lg btn-danger';
 			startbutton.value = 'Retake';
+			document.getElementById('base64').value = data;
 		} else {
 			photo.style.display = 'none';
 			startbutton.value = 'Take photo';
 			startbutton.className = 'btn btn-lg btn-success';
 		}
-	  } else {
+	} else {
 		clearphoto();
-	  }
-
-
+	}
 	}
 
 

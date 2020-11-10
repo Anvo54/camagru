@@ -255,6 +255,7 @@
 			
 				$data = [
 					'user_name' => trim($_POST['user_name']),
+					'email' => $this->userModel->getUserEmail($_POST['user_name']),
 					'link' => ''
 				];
 				
@@ -269,6 +270,7 @@
 				if (empty($data['name_err'])) {
 					$data['link'] = uniqid("", true);
 					if ($this->userModel->addLink($data)) {
+						sendRecoveryMail($data['email']->user_email, $data['user_name'], $data['link']);
 						redirect('users/login');
 					} else {
 						die('Something went wrong');

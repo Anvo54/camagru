@@ -11,7 +11,7 @@
 				</div>
 				<div class="row">
 					<div class="col">
-						<input type="submit" value="Change password" class="btn btn-success btn-block">
+						<input type="submit" value="Send password recovery link" class="btn btn-success btn-block">
 					</div>
 					<class class="col">
 						<a href="<?php echo URLROOT; ?>/users/register" class="btn btn-outline-dark btn-block">Create account?</a>

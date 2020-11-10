@@ -21,6 +21,28 @@
 		mail($address,$subject,$message, $headers);
 	}
 
+	function sendRecoveryMail($address, $user, $link) {
+		$subject = "Password recovery";
+		$message = '
+		<html>
+		<head>
+		  <title>email verification for '.$user.'</title>
+		</head>
+		<body>
+			<h1>Password recovey link below!</h1>
+			<br>
+			<p>Create a new password <a href="'.URLROOT."/users/reset/".$link.'">Here</a></p>
+		</body>
+		</html>
+		';
+
+		$headers  = 'MIME-Version: 1.0' . "\r\n";
+		$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+		$headers .= 'From: Camagru <no-reply@camagru.com>' . "\r\n";
+
+		mail($address,$subject,$message, $headers);
+	}
+
 	function sendNotificationMail($address, $id, $type) {
 		$subject = "New ".$type;
 		$message = '

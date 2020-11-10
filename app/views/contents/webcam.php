@@ -7,9 +7,11 @@
 				<video id="video">Video stream not available.</video>
 			</div>
 		</div>
+		<form action="<?php URLROOT.'/contents/webcam' ?>" method="post">
 		<div class="row">
 			<div class="output col">
 				<img id="photo">
+				<input name="photo" id="base64" type="hidden"></input>
 			</div>
 		</div>
 		<br>
@@ -19,8 +21,16 @@
 			</div>
 		</div>
 		<canvas id="canvas"></canvas>
-		<input type="text" name="imageName" id="imageName">
-		<input type="button" id="savebutton" value="save">
+		<div class="form-group">
+				<label for="name">Name: <sup>*</sup> </label>
+				<input type="text" name="image_title" class="form-control form-control-lg">
+			</div>
+			<div class="form-group">
+				<label for="description">Description: <sup>*</sup> </label>
+				<input type="text" name="image_desc" class="form-control form-control-lg" >
+			</div>
+		<input type="submit" value="Save Image" class="btn">
+		</form>
 	</div>
 </div>
 <script src="<?php echo URLROOT; ?>/public/js/capture.js"></script>
