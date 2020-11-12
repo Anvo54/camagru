@@ -43,12 +43,14 @@
 	border-radius: 1%;
 	width:inherit;
 	height:inherit;
+	max-width: 640px;
   }
   
   #photo {
 	border-radius: 1%;
 	width:inherit;
 	height:inherit;
+	max-width: 640px;
   }
   
   #canvas {
@@ -103,4 +105,3 @@
 	left: 0;
 	background-color: #e9ecef;
   }
-  

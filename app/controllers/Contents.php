@@ -73,27 +73,41 @@
 		{
 			if (isLoggedIn()){
 				if ($_SERVER['REQUEST_METHOD'] == 'POST'){
+					$_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
 					$data = [
 						'image' => $_POST['photo'],
-						'image_title' => $_POST['image_title'],
+						'image_title' => removeSpecialChar($_POST['image_title'].time()),
 						'image_desc' => trim($_POST['image_desc']),
 						'image_path' => '',
 						'user_id' => trim($_SESSION['user_id']),
+						'error_message' => ''
 					];
-					$data['image_path'] = URLROOT.'/public/img/'.$data['image_title'].mktime().'.png';
-					if ($this->galleryModel->addImage($data)){
+					$data['image_path'] = URLROOT.'/public/img/'.$data['image_title'].'.png';
+					if (empty($_POST['photo'])) {
+						$data['error_message'] = 'Please take photo before saving image!';
+					}
+					if ($this->galleryModel->addImage($data) && empty($data['error_message'])){
 						$img = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $data['image']));
-						file_put_contents('public/img/'.$data['image_title'].mktime().'.png', $img);
+						$img = imagecreatefromstring($img);
+						$sec_img = imagecreatefrompng('public/img/Stickers/face_mask.png');
+						imagealphablending($sec_img, false);
+						$sec_img = imagescale($sec_img, imageSX($img), -1);
+						imagesavealpha($sec_img, true);
+
+						imagecopy($img, $sec_img,0,0,0,0,imageSX($sec_img),imageSY($sec_img));
+						imagepng($img, 'public/img/'.$data['image_title'].'.png',null);
 						redirect('contents/gallery');
 					} else {
-						die('Something went wrong!');
+						
+						$this->view('contents/webcam', $data);
 					}
 				}
 				$data = [
 					'name' => '',
 					'name_err' => '',
 					'description' => '',
-					'description_err' => ''
+					'description_err' => '',
+					'error_message' => ''
 				];
 				$this->view('contents/webcam', $data);
 			} else {

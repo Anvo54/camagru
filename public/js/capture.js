@@ -17,8 +17,10 @@
 	  canvas = document.getElementById('canvas');
 	  photo = document.getElementById('photo');
 	  startbutton = document.getElementById('startbutton');
-	  savebutton = document.getElementById('savebutton');
+	  savebutton = document.getElementById('saveButton');
+
 	  photo.style.display = 'none';
+	  savebutton.disabled = true;
   
 	  navigator.mediaDevices.getUserMedia({video: true, audio: false})
 	  .then(function(stream) {
@@ -71,8 +73,6 @@
 		var data = canvas.toDataURL('image/png');
 		photo.setAttribute('src', data);
 
-		
-
 		if (video.style.display === 'none'){
 			video.style.display = 'block';
 		} else 
@@ -81,9 +81,13 @@
 			photo.style.display = 'block';
 			startbutton.className = 'btn btn-lg btn-danger';
 			startbutton.value = 'Retake';
+			savebutton.disabled = false;
+			savebutton.className = 'btn btn-lg btn-success';
 			document.getElementById('base64').value = data;
 		} else {
 			photo.style.display = 'none';
+			savebutton.className = 'btn btn-lg';
+			savebutton.disabled = true;
 			startbutton.value = 'Take photo';
 			startbutton.className = 'btn btn-lg btn-success';
 		}
