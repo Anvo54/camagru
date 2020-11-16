@@ -1,10 +1,22 @@
 <?php
+require_once '../app/helpers/url_helper.php';
+require_once '../app/helpers/session_helper.php';
+
 	$lorem = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut vitae vestibulum mi. Donec in risus massa. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Aliquam venenatis nisl eu risus efficitur, et condimentum lectus tristique. Sed eu lobortis enim. Vestibulum sed augue non purus dapibus posuere. Fusce gravida nunc nec neque tempus, in hendrerit velit tristique. Donec eu convallis neque.';
 
 	if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+		if (isLoggedIn()){
+			unset($_SESSION['user_id']);
+			unset($_SESSION['user_name']);
+			session_destroy();
+		}
+
 		$db = new Database;
+		$db->query('DROP TABLE IF EXISTS `users`, `comments`, `image_likes`, `images`');
+		$db->execute();
 		echo "Creating user table<br>";
-		$db->query('CREATE TABLE `users` (`user_id` INT NOT NULL AUTO_INCREMENT,`user_name` varchar(32) NOT NULL,`user_email` varchar(64) NOT NULL,`password` varchar(255) NOT NULL,`link` varchar(32) DEFAULT NULL,`verified` tinyint(1) DEFAULT NULL, PRIMARY KEY (`user_id`))');
+		$db->query('CREATE TABLE `users` (`user_id` INT NOT NULL AUTO_INCREMENT,`user_name` varchar(32) NOT NULL,`user_email` varchar(64) NOT NULL,`password` varchar(255) NOT NULL,`link` varchar(32) DEFAULT NULL,`verified` tinyint(1) DEFAULT NULL, `comment_email` tinyint(1) DEFAULT NULL, `like_email` tinyint(1) DEFAULT NULL, PRIMARY KEY (`user_id`))');
 		$db->execute();
 		echo "Creating comments table<br>";
 		$db->query('CREATE TABLE `comments` ( `id` INT NOT NULL AUTO_INCREMENT , `post_id` INT NOT NULL , `user_id` INT NOT NULL , `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP , `comment` TEXT NOT NULL , PRIMARY KEY (`id`))');
@@ -16,7 +28,7 @@
 		$db->query('CREATE TABLE `images` (`image_id` int NOT NULL AUTO_INCREMENT, `image_title` varchar(255) NOT NULL, `image_desc` varchar(255) NOT NULL,`image_path` varchar(255) NOT NULL, `user_id` int DEFAULT NULL, `created_at` datetime DEFAULT CURRENT_TIMESTAMP, PRIMARY KEY (`image_id`))');
 		$db->execute();
 
-		if ($_POST['sample-data']){
+		if (isset($_POST['sample-data'])&& $_POST['sample-data']){
 			$i = 0;
 			while($i++ < 10) {
 				$db->query('INSERT INTO `users` (`user_id` ,`user_name`,`user_email`,`password`,`link`,`verified`) VALUES (NULL, :name, :email, :password, null, true)');
@@ -46,37 +58,5 @@
 				$db->execute();
 			}
 		}
+		redirect('');
 	}
-/***
- * 
- * 
- * 
- class install {
-		 private $db;
-	 public function __construct() {
-		 $this->db = new Database;
-	 }
-
-	 public function all()
-	 {
-		 echo "Creating user table";
-		 $this->db->query('CREATE TABLE `users11` (`user_id` int NOT NULL AUTO_INCREMENT,`user_name` varchar(32) NOT NULL,`user_email` varchar(64) NOT NULL,`password` varchar(255) NOT NULL,`link` varchar(32) DEFAULT NULL,`verified` tinyint(1) DEFAULT NULL, PRIMARY KEY (`user_id`)');
-		 $this->db->execute();
-		 echo "Creating comments table";
-		 $this->db->query('CREATE TABLE `comments11` ( `id` INT NOT NULL AUTO_INCREMENT , `post_id` INT NOT NULL , `user_id` INT NOT NULL , `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP , `comment` TEXT NOT NULL , PRIMARY KEY (`id`))');
-		 $this->db->execute();
-		 echo "Creating likes table";
-		 $this->db->query('CREATE TABLE `image_likes11` ( `id` INT NOT NULL AUTO_INCREMENT , `image_id` INT NOT NULL , `user_id` INT NOT NULL , PRIMARY KEY (`id`))');
-		 $this->db->execute();
-		 echo "Creating images table";
-		 $this->db->query('CREATE TABLE `images11` (`image_id` int NOT NULL AUTO_INCREMENT, `image_title` varchar(255) NOT NULL, `image_desc` varchar(255) NOT NULL,`image_path` varchar(255) NOT NULL, `user_id` int DEFAULT NULL, `created_at` datetime DEFAULT CURRENT_TIMESTAMP, PRIMARY KEY (`image_id`)');
-		 $this->db->execute();
-	 }
-
-	 public function addSampleData()
-	 {
-		 echo "Samples on the way";
-	 }
- }
- */
-	

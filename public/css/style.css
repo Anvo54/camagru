@@ -45,12 +45,20 @@
 	height:inherit;
 	max-width: 640px;
   }
-  
+
   #photo {
+	display: grid;
+	grid-template-columns: repeat(5, 1fr);
+	grid-gap: 1vmin;
+  }
+  
+  #photo input {
 	border-radius: 1%;
-	width:inherit;
-	height:inherit;
-	max-width: 640px;
+	width: 100%;
+  }
+
+  #photo input:focus {
+	  border: 2vmin violet;
   }
   
   #canvas {
@@ -61,14 +69,11 @@
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
+	/*Below is test*/
 	justify-content: center;
-  }
-  
-  .output {
-	display: flex;
-	flex-wrap: wrap;
-	align-items: center;
-	justify-content: center;
+	width:inherit;
+	height:inherit;
+	max-width: 640px;
   }
 
   .contentarea {
@@ -104,4 +109,21 @@
 	width: 100%;
 	left: 0;
 	background-color: #e9ecef;
+  }
+
+  .tree {
+	  position: absolute;
+	  z-index: 1000;
+  }
+
+  .stickers {
+	  max-width: 100%;
+	  max-height: 100%;
+  }
+
+  #stickerCanvas {
+	border-radius: 1%;
+	width:inherit;
+	height:inherit;
+	max-width: 640px;
   }
