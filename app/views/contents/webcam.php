@@ -2,23 +2,26 @@
 <br>
 <div class="container main">
 	<div class="card card-body bg-light mt5">
-			<?php if (!empty($data['error_message'])) : ?>
-				<div class="alert alert-danger"><?php echo $data['error_message']; ?></div>
-			<?php endif; ?>
+		<?php if (!empty($data['error_message'])) : ?>
+			<div class="alert alert-danger"><?php echo $data['error_message']; ?></div>
+		<?php endif; ?>
+		<form action="<?php URLROOT.'/contents/webcam' ?>" method="post">
 		<div class="row">
+			<div class="col">
+				<img src="<?php echo URLROOT.'/public/img/tree.png' ?>" id="tree" class="img-thumbnail stickers">
+			</div>
 			<div class="col camera" id="camera">
 				<video id="video">
 					Video stream not available.
 				</video>
 			</div>
+			<div class="col" id="photo"></div>
 		</div>
-		<form action="<?php URLROOT.'/contents/webcam' ?>" method="post">
 		<br>
 		<div class="row">
 			<div class="col text-center">
 				<input type="button" id="startbutton" class="btn btn-lg btn-success" value="Take photo"></input>
 			</div>
-			<img src="<?php echo URLROOT.'/public/img/tree.png' ?>" id="tree" class="img-thumbnail stickers">
 		</div>
 		<canvas id="canvas"></canvas>
 		<div class="form-group">
@@ -33,8 +36,8 @@
 				<h2 class="col text-center" id="uploader-text">Select photo to upload!</h2>
 			</div>
 			<div class="row">
-			<div class="output col" id="photo">
-				<input name="photo" id="base64" type="hidden"></input>
+			<div class="output col">
+				<input name="selected_image" id="selected_image" type="hidden"></input>
 			</div>
 		</div>
 		</form>

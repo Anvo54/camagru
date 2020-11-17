@@ -12,13 +12,13 @@
 	var startbutton = null;
 	var uploaderText = null;
 	var treeSticker = null;
-	var StickerCanvas = null;
+	var selected_image = null;
 
 	function startup() {
 		video = document.getElementById('video');
 		camera = document.getElementById('camera');
 		canvas = document.getElementById('canvas');
-		StickerCanvas = document.getElementById('StickerCanvas');
+		selected_image = document.getElementById('selected_image');
 		photo = document.getElementById('photo');
 		startbutton = document.getElementById('startbutton');
 		uploaderText = document.getElementById('uploader-text');
@@ -96,7 +96,28 @@
 			img.addEventListener('click', event => {
 				document.getElementById('base64').value = event.target.getAttribute('src');
 			})
-			photo.appendChild(img);
+			/***TESTING BELOW. REMOVE!! */
+			var formData = new FormData();
+
+			formData.append("photo", img.getAttribute('src'));
+	
+			var ajatus = new XMLHttpRequest();
+		
+			ajatus.onreadystatechange = function() {
+				if (this.readyState == 4 && this.status == 200) {
+					var newImg = document.createElement('input');
+					newImg.type = 'image'
+					newImg.src = this.response;
+					newImg.addEventListener('click', event => {
+						selected_image.value = event.target.getAttribute('src');
+					})
+					newImg.className = 'photo';
+					photo.appendChild(newImg);
+				}
+			};
+			ajatus.open("POST", 'test')
+			ajatus.send(formData);
+
 			uploaderText.style.display = 'block';
 			}
 				else

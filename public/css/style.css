@@ -48,8 +48,9 @@
 
   #photo {
 	display: grid;
-	grid-template-columns: repeat(5, 1fr);
+	grid-template-rows: auto;
 	grid-gap: 1vmin;
+	overflow-y: scroll;
   }
   
   #photo input {
@@ -69,11 +70,6 @@
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
-	/*Below is test*/
-	justify-content: center;
-	width:inherit;
-	height:inherit;
-	max-width: 640px;
   }
 
   .contentarea {
@@ -112,7 +108,7 @@
   }
 
   .tree {
-	  position: absolute;
+	  position: relative;
 	  z-index: 1000;
   }
 

@@ -69,27 +69,45 @@
 			}
 		}
 
+		public function test()
+		{
+			if (isLoggedIn() && $_SERVER['REQUEST_METHOD'] == 'POST') {
+				$_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+				if (!file_exists('public/img/tmp/'.$_SESSION['user_name']))
+				{
+					mkdir('public/img/tmp/'.$_SESSION['user_name']);
+				}
+				$data = [
+					'image' => $_POST['photo'],
+					'filename' => 'public/img/tmp/'.$_SESSION['user_name'].'/' . uniqid() . '_tmp.png'
+				];
+				$img = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $data['image']));
+				$img = imagecreatefromstring($img);
+				$sec_img = imagecreatefrompng('public/img/tree.png');
+				imagecopy($img, $sec_img,imageSX($img) / 2,imageSY($img) / 2,0,0,imageSX($sec_img),imageSY($sec_img));
+				imagepng($img, $data['filename']);
+				echo URLROOT.'/'.$data['filename'];
+			}
+		}
+
 		public function webcam()
 		{
 			if (isLoggedIn()){
 				if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 					$_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
-
 					$filename = 'public/img/'.removeSpecialChar($_POST['image_title']).uniqid().'.png';
+					$tmp = explode(URLROOT.'/',$_POST['selected_image']);
+					rename($tmp[1], $filename);
 					$data = [
-						'image' => $_POST['photo'],
 						'image_title' => $_POST['image_title'],
 						'image_desc' => trim($_POST['image_desc']),
 						'image_path' => URLROOT.'/'.$filename,
 						'user_id' => trim($_SESSION['user_id']),
 					];
-
 					if ($this->galleryModel->addImage($data)){
-						$img = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $data['image']));
-						$img = imagecreatefromstring($img);
-						$sec_img = imagecreatefrompng('public/img/tree.png');
-						imagecopy($img, $sec_img,imageSX($img) / 2,imageSY($img) / 2,0,0,imageSX($sec_img),imageSY($sec_img));
-						imagepng($img, $filename, null);
+		
+						array_map('unlink' ,glob(dirname($tmp[1]).'/*.png'));
+						rmdir(dirname($tmp[1].'/'));
 						redirect('contents/gallery');
 					} else {
 						$this->view('contents/webcam', $data);
@@ -213,11 +231,10 @@
 					if (empty($data['comment'])) {
 						$data['comment_err'] = "Comment can't be empty!";
 					}
-	
 					if (empty($data['comment_err'])) {
 						if ($this->galleryModel->addComment($data)) {
 							$user = $this->userModel->getImageOwner($data['post_id']);
-							if($user->like_comment) {
+							if($user->comment_email) {
 								sendNotificationMail($user->user_email, $data['post_id'], "Comment");
 							}
 							redirect('/contents/show/'.$data['post_id']);
