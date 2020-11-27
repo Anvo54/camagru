@@ -79,12 +79,26 @@
 				}
 				$data = [
 					'image' => $_POST['photo'],
+					'tree' => $_POST['tree'],
+					'garden' => $_POST['garden'],
+					'star' => $_POST['star'],
 					'filename' => 'public/img/tmp/'.$_SESSION['user_name'].'/' . uniqid() . '_tmp.png'
 				];
 				$img = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $data['image']));
 				$img = imagecreatefromstring($img);
-				$sec_img = imagecreatefrompng('public/img/tree.png');
-				imagecopy($img, $sec_img,imageSX($img) / 2,imageSY($img) / 2,0,0,imageSX($sec_img),imageSY($sec_img));
+
+				if ($data['tree'] == 'true') {
+					$sec_img = imagecreatefrompng('public/img/Stickers/tree.png');
+					imagecopy($img, $sec_img,imageSX($img) / 2,imageSY($img) / 2,0,0,imageSX($sec_img),imageSY($sec_img));
+				}
+				if ($data['garden'] == 'true') {
+					$sec_img = imagecreatefrompng('public/img/Stickers/garden.png');
+					imagecopy($img, $sec_img,0,0,0,0,imageSX($sec_img),imageSY($sec_img));
+				}
+				if ($data['star'] == 'true') {
+					$sec_img = imagecreatefrompng('public/img/Stickers/star.png');
+					imagecopy($img, $sec_img,80,45,0,0,imageSX($sec_img),imageSY($sec_img));
+				}
 				imagepng($img, $data['filename']);
 				echo URLROOT.'/'.$data['filename'];
 			}

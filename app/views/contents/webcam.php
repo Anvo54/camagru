@@ -1,21 +1,26 @@
 <?php require APPROOT . '/views/inc/header.php';?>
 <br>
+<video id="video">Video stream not available.</video>
 <div class="container main">
 	<div class="card card-body bg-light mt5">
 		<?php if (!empty($data['error_message'])) : ?>
 			<div class="alert alert-danger"><?php echo $data['error_message']; ?></div>
 		<?php endif; ?>
 		<form action="<?php URLROOT.'/contents/webcam' ?>" method="post">
+		<h5>Stickers</h5>
 		<div class="row">
-			<div class="col">
-				<img src="<?php echo URLROOT.'/public/img/tree.png' ?>" id="tree" class="img-thumbnail stickers">
-			</div>
-			<div class="col camera" id="camera">
-				<video id="video">
-					Video stream not available.
-				</video>
-			</div>
-			<div class="col" id="photo"></div>
+			<img src="<?php echo URLROOT.'/public/img/Stickers/tree.png' ?>" id="tree" class="img-thumbnail stickers">
+			<img src="<?php echo URLROOT.'/public/img/Stickers/garden.png' ?>" id="garden" class="img-thumbnail stickers">
+			<img src="<?php echo URLROOT.'/public/img/Stickers/star.png' ?>" id="star" class="img-thumbnail stickers">
+		</div>
+		<div class="row d-flex justify-content-center">
+			<canvas id='stickerCanvas'></canvas>
+		</div>
+		<div class="row">
+			<p class="col text-center" id="uploader-text">Select photo below to upload!</p>
+		</div>
+		<div class="row d-flex justify-content-center">
+			<div id="photo"></div>
 		</div>
 		<br>
 		<div class="row">
@@ -31,9 +36,6 @@
 			<div class="form-group">
 				<label for="description">Description: <sup>*</sup> </label>
 				<input type="text" name="image_desc" class="form-control form-control-lg" required>
-			</div>
-			<div class="row">
-				<h2 class="col text-center" id="uploader-text">Select photo to upload!</h2>
 			</div>
 			<div class="row">
 			<div class="output col">
