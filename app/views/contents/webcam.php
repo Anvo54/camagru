@@ -8,12 +8,13 @@
 		<?php endif; ?>
 		<form action="<?php URLROOT.'/contents/webcam' ?>" method="post">
 		<h5>Stickers</h5>
+		<input type="checkbox" name="webcam" id="cam"> Use webcam
 		<div class="row">
 			<img src="<?php echo URLROOT.'/public/img/Stickers/tree.png' ?>" id="tree" class="img-thumbnail stickers">
 			<img src="<?php echo URLROOT.'/public/img/Stickers/garden.png' ?>" id="garden" class="img-thumbnail stickers">
 			<img src="<?php echo URLROOT.'/public/img/Stickers/star.png' ?>" id="star" class="img-thumbnail stickers">
 		</div>
-		<div class="row d-flex justify-content-center">
+		<div class="row d-flex justify-content-center" ondrop="dropHandler(event);" ondragover="dragOverHandler(event);">
 			<canvas id='stickerCanvas'></canvas>
 		</div>
 		<div class="row">

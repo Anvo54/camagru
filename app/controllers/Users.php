@@ -19,6 +19,11 @@
 			$this->view('users/register', $data);
 		}
 
+		public function verifyinfo()
+		{
+			$this->view('users/verifyinfo', []);
+		}
+
 		public function register()
 		{
 			if (isLoggedIn()){
@@ -46,7 +51,7 @@
 					$data['password'] = password_hash($data['password'],PASSWORD_DEFAULT);
 					if ($this->userModel->registerUser($data)){
 						sendVerificationMail($data['email'], $data['user_name'], $data['link']);
-						redirect('users/login');
+						redirect('users/verifyinfo');
 					} else {
 						die('Something went wrong');
 					}

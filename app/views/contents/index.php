@@ -14,7 +14,7 @@
 	<?php if ($data['images']): ?>
 	<?php foreach($data['images'] as $image) : ?>
 		<div class="card card-body mb-3">
-		<img src="<?php echo $image->image_path;?>" class="card-img-top mx-auto mb-3" style="width: auto; height: auto; max-height: 35rem;">
+		<img src="<?php echo $image->image_path;?>" class="card-img-top mx-auto mb-3">
 			<h4 class="card-title">
 				<?php echo $image->image_title; ?>
 			</h4>

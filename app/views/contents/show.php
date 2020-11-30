@@ -9,7 +9,7 @@
 	</div>
 	<?php endif; ?>
 	<div class="card card-body mb-3">
-		<img class="card-img-top mx-auto mb-3" style="width: auto; height: auto; max-height: 35rem;" src="<?php echo $data['image']->image_path;?>">
+		<img class="card-img-top mx-auto mb-3" src="<?php echo $data['image']->image_path;?>">
 		<h1><?php echo $data['image']->image_title; ?></h1>
 		<div class="bg-secondary text-white p-2 mb-3">
 			Image by: <?php echo $data['user']->user_name; ?> on <?php echo $data['image']->created_at; ?> 

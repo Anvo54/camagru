@@ -5,8 +5,6 @@
 	require 'config.php';
 	require '../app/libraries/Database.php';
 	require 'install.php';
-
-
 ?>
 
 <!DOCTYPE html>
