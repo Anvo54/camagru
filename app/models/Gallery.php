@@ -23,9 +23,20 @@
 			}
 		}
 
-		public function getImages()
+		public function getPages()
 		{
-			$this->db->query('SELECT * FROM images ORDER BY created_at DESC');
+			$this->db->query('SELECT * FROM images');
+			$row = $this->db->single();
+
+			return $this->db->rowCount();
+		}
+
+		public function getImages($offset, $no_of_records_per_page)
+		{
+			$this->db->query('SELECT * FROM images ORDER BY created_at DESC LIMIT :offset, :no_of_records_per_page');
+			$this->db->bind(':offset', $offset);
+			$this->db->bind(':no_of_records_per_page', $no_of_records_per_page);
+
 
 			$result = $this->db->resultSet();
 

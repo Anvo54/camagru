@@ -27,4 +27,13 @@
 			<h1>No images yet :(</h1>
 		</div>
 	<?php endif; ?>
+	<ul class="pagination justify-content-center">
+		<li class="<?php if($data['pageno'] <= 1){ echo 'disabled'; } ?>">
+			<a href="<?php if($data['pageno'] <= 1){ echo '#'; } else { echo URLROOT.'/contents/'.($data['pageno'] - 1); } ?>">Prev</a>
+		</li>
+		<li class="<?php if($data['pageno'] >= $data['total_pages']){ echo 'disabled'; } ?>">
+			<a href="<?php if($data['pageno'] >= $data['total_pages']){ echo '#'; } else { echo URLROOT.'/contents/'.($data['pageno'] + 1); } ?>">Next</a>
+		</li>
+	</ul>
+	<?php echo 'Total pages: '.$data['total_pages']; ?>
 <?php require APPROOT . '/views/inc/footer.php';?>

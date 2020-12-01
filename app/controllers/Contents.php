@@ -4,18 +4,28 @@
 			$this->galleryModel = $this->model('Gallery');
 			$this->userModel = $this->model('User');
 		}
-		public function index()
+		public function index($pageno)
 		{
-			if (isset($_GET['pageno'])) {
-				$pageno = $_GET['pageno'];
-			} else {
+			$pages = $this->galleryModel->getPages();
+			$no_of_records_per_page = 5;
+			$total_pages = ceil($pages / $no_of_records_per_page);
+
+			if (empty($pageno) || !is_numeric($pageno)) {
 				$pageno = 1;
 			}
 			
-			$images = $this->galleryModel->getImages();
+			if ($pageno >= $total_pages){
+				$pageno = intval($total_pages);
+			}
 
+			$offset = ($pageno-1) * $no_of_records_per_page; 
+			
+			$images = $this->galleryModel->getImages($offset, $no_of_records_per_page);
+			
 			$data = [
-				'images' => $images
+				'images' => $images,
+				'total_pages' => $total_pages,
+				'pageno' => $pageno
 			];
 			$this->view('contents/index', $data);
 		}
@@ -156,18 +166,19 @@
 					'image' => $id,
 					'user' => trim($_SESSION['user_id'])
 				];
-	
-				if ($this->galleryModel->checkUserLike($data)){
-					redirect('contents/show/'.$id);
-				} else {
-					if ($this->galleryModel->likeImage($data)){
-						$user = $this->userModel->getImageOwner($id);
-						if($user->like_email) {
-							sendNotificationMail($user->user_email, $id, "Like");
-						}
+				if ($this->galleryModel->getImageById($id)) {
+					if ($this->galleryModel->checkUserLike($data)){
 						redirect('contents/show/'.$id);
 					} else {
-						die('Something went wrong!');
+						if ($this->galleryModel->likeImage($data)){
+							$user = $this->userModel->getImageOwner($id);
+							if($user->like_email) {
+								sendNotificationMail($user->user_email, $id, "Like");
+							}
+							redirect('contents/show/'.$id);
+						} else {
+							die('Something went wrong!');
+						}
 					}
 				}
 			} else {
