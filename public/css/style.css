@@ -72,19 +72,6 @@
 	width: 760px;
   }
 
-  #drop-area {
-	border: 2px dashed #ccc;
-	border-radius: 20px;
-	width: 480px;
-	font-family: sans-serif;
-	margin: 100px auto;
-	padding: 20px;
-  }
-
-  #drop-area.highlight {
-	border-color: purple;
-  }
-
   .main {
 	min-height: 100%;
 	margin-bottom: 3vh;
@@ -107,10 +94,20 @@
 	height: 15vmin;
   }
 
+  .stickers:hover {
+	  cursor: pointer;
+  }
+
   #stickerCanvas {
+	border-radius: 1%;
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
 	width: 100%;
 	z-index: 10;
+  }
+
+  #stickerCanvas:hover {
+	cursor: pointer;
+	color: rgb(0, 191, 255);
   }

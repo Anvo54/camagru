@@ -10,14 +10,21 @@ var uploaderText = null;
 var treeSticker = null;
 var gardenSticker = null;
 var starSticker = null;
+var chainSticker = null;
+var capeSticker = null;
+var faceMaskSticker = null;
 var selected_image = null;
 var droparea = null;
 var selected_file = null;
+var fileInput = null;
 var reader = new FileReader
 
 var tree = false;
 var garden = false;
 var star = false;
+var chain = false;
+var cape = false;
+var facemask = false;
 var streaming = false;
 var cam = null;
 
@@ -32,10 +39,42 @@ uploaderText = document.getElementById('uploader-text');
 treeSticker = document.getElementById('tree');
 gardenSticker = document.getElementById('garden');
 starSticker = document.getElementById('star');
+chainSticker = document.getElementById('chain');
+capeSticker = document.getElementById('cape');
+faceMaskSticker = document.getElementById('facemask');
 cam = document.getElementById('cam');
+fileInput = document.createElement('input');
+let overlay = document.getElementById('message');
 
 startbutton.disabled = true;
 uploaderText.style.display = 'none';
+
+fileInput.type = 'file';
+fileInput.accept = 'image/png, image/jpeg';
+fileInput.multiple = false;
+temp_canvas.addEventListener('click', () => {
+	fileInput.click();
+})
+
+
+fileInput.addEventListener("change", () => {
+	var file = fileInput.files;
+	if (file[0]) {
+		reader.readAsDataURL(file[0]);
+		reader.onloadend = () => {
+			let img = document.createElement('img');
+			img.src = reader.result;
+			selected_file = img;
+			cam.checked = false;
+			canvas.setAttribute('width', width);
+			canvas.setAttribute('height', height);
+			temp_canvas.setAttribute('width', width);
+			temp_canvas.setAttribute('height', height);
+			startDisable()
+			manipulateCanvas();
+		}
+	}
+});
 
 const clearphoto = () => {
 	var context = canvas.getContext('2d');
@@ -55,32 +94,32 @@ const clearTempCanvas = () => {
 }
 
 const dropHandler = (event) => {
-	console.log('File(s) dropped');
 	event.preventDefault();
 	if (event.dataTransfer.items) {
-		// Use DataTransferItemList interface to access the file(s)
 		if (event.dataTransfer.items[0].kind === 'file') {
-		  var file = event.dataTransfer.items[0].getAsFile();
-		  if (file.type.match('^image/')) {
-			  reader.readAsDataURL(file);
-			  reader.onloadend = function() {
-				let img = document.createElement('img');
-				img.src = reader.result;
-				selected_file = img;
-				cam.checked = false;
-				canvas.setAttribute('width', width);
-				canvas.setAttribute('height', height);
-				temp_canvas.setAttribute('width', width);
-				temp_canvas.setAttribute('height', height);
-				manipulateCanvas();
-			  }
-		  }
+		var file = event.dataTransfer.items[0].getAsFile();
+			if (file.type.match('^image/')) {
+				reader.readAsDataURL(file);
+				reader.onloadend = function() {
+					let img = document.createElement('img');
+					img.src = reader.result;
+					selected_file = img;
+					cam.checked = false;
+					canvas.setAttribute('width', width);
+					canvas.setAttribute('height', height);
+					temp_canvas.setAttribute('width', width);
+					temp_canvas.setAttribute('height', height);
+					manipulateCanvas();
+				}
+			}
 		}
 	}
 }
 
-const startDisable = () =>{
-	if (!star && !garden && !tree)
+const startDisable = () => {
+	if (cam.checked == false && selected_file)
+		startbutton.disabled = false;
+	else if (!star && !garden && !tree && !chain && !cape && !facemask)
 		startbutton.disabled = true;
 	else
 		startbutton.disabled = false;
@@ -111,6 +150,21 @@ starSticker.addEventListener('click', () => {
 	startDisable()
 })
 
+capeSticker.addEventListener('click', () => {
+	cape = (!cape) ? true : false;
+	startDisable()
+})
+
+chainSticker.addEventListener('click', () => {
+	chain = (!chain) ? true : false;
+	startDisable()
+})
+
+faceMaskSticker.addEventListener('click', () => {
+	facemask = (!facemask) ? true : false;
+	startDisable()
+})
+
 cam.addEventListener('change', event => {
 	if (event.target.checked) {
 		startDisable()
@@ -122,9 +176,9 @@ cam.addEventListener('change', event => {
 })
 
 droparea.addEventListener('mouseover', event => {
+	overlay.style.display = 'block';
 	console.log(event);
 })
-
 
 navigator.mediaDevices.getUserMedia({video: true, audio: false})
 	.then(function(stream) {
@@ -135,6 +189,7 @@ navigator.mediaDevices.getUserMedia({video: true, audio: false})
 	.catch(function(err) {
 		cam.checked = false;
 		cam.disabled = true;
+		overlay.style.display = 'block';
 		manipulateCanvas();
 		console.log("An error occurred: " + err);
 	});
@@ -163,12 +218,13 @@ const manipulateCanvas = () => {
 	c_tmp.width = width;
 	c_tmp.height = height;
 	setInterval(() => {
-		if (selected_file){
+		if (cam.checked){
+			c_tmp.drawImage(video, 0,0, width, height)
+		}
+		else if (selected_file){
 			startDisable()
 			c_tmp.drawImage(selected_file,0,0,width, height);
 		}
-		else if (cam.checked)
-			c_tmp.drawImage(video, 0,0, width, height)
 		else
 			clearTempCanvas();
 		if (tree)
@@ -177,7 +233,12 @@ const manipulateCanvas = () => {
 			c_tmp.drawImage(gardenSticker, 0, 0);
 		if (star)
 			c_tmp.drawImage(starSticker, 80, 45);
-		
+		if (cape)
+			c_tmp.drawImage(capeSticker, 0,0);
+		if (chain)
+			c_tmp.drawImage(chainSticker, 0,0);
+		if (facemask)
+			c_tmp.drawImage(faceMaskSticker, 0,0);
 	},16);
 }
 
@@ -204,6 +265,10 @@ const takepicture = () => {
 		formData.append("tree", tree);
 		formData.append("garden", garden);
 		formData.append("star", star);
+		formData.append("chain", chain);
+		formData.append("cape", cape);
+		formData.append("facemask", facemask);
+
 		var oReq = new XMLHttpRequest();
 	
 		oReq.onreadystatechange = function() {
@@ -222,6 +287,7 @@ const takepicture = () => {
 		oReq.send(formData);
 		selected_file = null;
 		clearTempCanvas();
+		startDisable();
 		uploaderText.style.display = 'block';
 		} else {
 			clearphoto();

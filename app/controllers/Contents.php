@@ -6,67 +6,18 @@
 		}
 		public function index()
 		{
+			if (isset($_GET['pageno'])) {
+				$pageno = $_GET['pageno'];
+			} else {
+				$pageno = 1;
+			}
+			
 			$images = $this->galleryModel->getImages();
 
 			$data = [
 				'images' => $images
 			];
 			$this->view('contents/index', $data);
-		}
-
-		public function add()
-		{
-			if (isLoggedIn()){
-				if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-					$_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
-	
-					$data = [
-						'image_title' => trim($_POST['image_title']),
-						'image_desc' => trim($_POST['image_desc']),
-						'image_path' => trim($_POST['image_path']),
-						'user_id' => trim($_SESSION['user_id']),
-						'title_err' => '',
-						'image_desc_err' => '',
-						'image_path_err' => ''
-					];
-	
-					if (empty($data['image_title'])){
-						$data['image_err'] = 'Please enter title';
-					}
-	
-					if (empty($data['image_desc'])){
-						$data['image_desc_err'] = 'Please enter description';
-					}
-	
-					if (empty($data['image_path'])){
-						$data['image_path_err'] = 'Please upload a photo!';
-					}
-	
-					if (empty($data['title_err']) && empty($data['image_path_err']) && empty($data['image_desc_err'])){
-						if ($this->galleryModel->addImage($data)){
-							redirect('contents/gallery');
-						} else {
-							die('Something went wrong!');
-						}
-					} else {
-						$this->view('contents/add', $data);
-					}
-				} else {
-					$data = [
-						'image_title' => '',
-						'image_desc' => '',
-						'image_path' => '',
-						'title_err' => '',
-						'image_desc_err' => '',
-						'image_path_err' => ''
-					];
-		
-					$this->view('contents/add', $data);
-				}
-			} else {
-				redirect('users/login');
-
-			}
 		}
 
 		public function add_temp_photo()
@@ -82,6 +33,9 @@
 					'tree' => $_POST['tree'],
 					'garden' => $_POST['garden'],
 					'star' => $_POST['star'],
+					'chain' => $_POST['chain'],
+					'cape' => $_POST['cape'],
+					'facemask' => $_POST['facemask'],
 					'filename' => 'public/img/tmp/'.$_SESSION['user_name'].'/' . uniqid() . '_tmp.png'
 				];
 				$img = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $data['image']));
@@ -99,12 +53,24 @@
 					$sec_img = imagecreatefrompng('public/img/Stickers/star.png');
 					imagecopy($img, $sec_img,80,45,0,0,imageSX($sec_img),imageSY($sec_img));
 				}
+				if ($data['cape'] == 'true') {
+					$sec_img = imagecreatefrompng('public/img/Stickers/cape.png');
+					imagecopy($img, $sec_img,0,0,0,0,imageSX($sec_img),imageSY($sec_img));
+				}
+				if ($data['chain'] == 'true') {
+					$sec_img = imagecreatefrompng('public/img/Stickers/chain.png');
+					imagecopy($img, $sec_img,0,0,0,0,imageSX($sec_img),imageSY($sec_img));
+				}
+				if ($data['facemask'] == 'true') {
+					$sec_img = imagecreatefrompng('public/img/Stickers/face_mask.png');
+					imagecopy($img, $sec_img,0,0,0,0,imageSX($sec_img),imageSY($sec_img));
+				}
 				imagepng($img, $data['filename']);
 				echo URLROOT.'/'.$data['filename'];
 			}
 		}
 
-		public function webcam()
+		public function add()
 		{
 			if (isLoggedIn()){
 				if ($_SERVER['REQUEST_METHOD'] == 'POST'){
@@ -124,7 +90,7 @@
 						rmdir(dirname($tmp[1].'/'));
 						redirect('contents/gallery');
 					} else {
-						$this->view('contents/webcam', $data);
+						$this->view('contents/add', $data);
 					}
 				}
 				$data = [
@@ -134,7 +100,7 @@
 					'description_err' => '',
 					'error_message' => ''
 				];
-				$this->view('contents/webcam', $data);
+				$this->view('contents/add', $data);
 			} else {
 				redirect('users/login');
 			}
