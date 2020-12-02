@@ -127,7 +127,7 @@ const dropHandler = (event) => {
 const startDisable = () => {
 	if (cam.checked == false && selected_file)
 		startbutton.disabled = false;
-	else if (cam.checked == true && (star || garden || tree || chain || cape || facemask))
+	else if (star || garden || tree || chain || cape || facemask || cam.checked)
 		startbutton.disabled = false;
 	else
 		startbutton.disabled = true;
@@ -137,11 +137,6 @@ startbutton.addEventListener('click', (ev) => {
 	takepicture();
 	ev.preventDefault();
 }, false);
-
-const dragOverHandler = (event) => {
-	// ADD CSS HERE TO DRAG AND DROP INFO!!!!
-	event.preventDefault()
-}
 
 treeSticker.addEventListener('click', () => {
 	tree = (!tree) ? true : false;
@@ -183,6 +178,10 @@ cam.addEventListener('change', event => {
 	}
 })
 
+const dragOverHandler = (event) => {
+	event.preventDefault()
+}
+
 droparea.addEventListener('mouseover', event => {
 	overlay = true;
 })
@@ -220,6 +219,7 @@ video.addEventListener('canplay', function(ev){
 	streaming = true;
 	cam.checked = true;
 	cam.disabled = false;
+	startDisable();
 	manipulateCanvas()
 	}
 }, false);
