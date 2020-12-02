@@ -165,7 +165,6 @@
 	
 				if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 					$_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
-
 					$data = [
 						'user_name' => trim($_POST['user_name']),
 						'email' => trim($_POST['email']),
@@ -188,7 +187,7 @@
 					$lowercase = preg_match('@[a-z]@', $data['new_password']);
 					$numbers = preg_match('@[0-9]@', $data['new_password']);
 					$specialChars = preg_match('@[^\w]@', $data['new_password']);
-	
+
 					if (!$uppercase | !$lowercase | !$numbers | !$specialChars) {
 						$data = [
 							'user' => $user,
@@ -198,9 +197,13 @@
 					} 
 					//** CREATE hashed new password AND Old password */
 					$data['new_password'] = password_hash($data['new_password'],PASSWORD_DEFAULT);
+
 					$loginSuccess = $this->userModel->login($_SESSION['user_name'], $data['password']);
+
 					if ($loginSuccess) {
 						if ($this->userModel->editUser($data)) {
+							$_SESSION['user_name'] = $data['user_name'];
+							$user = $this->userModel->getUserById($id);
 							$data = [
 								'user' => $user,
 								'success_message' => 'Account preferences changed successfully!'
