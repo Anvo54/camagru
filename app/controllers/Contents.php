@@ -7,8 +7,12 @@
 		public function index($pageno)
 		{
 			$pages = $this->galleryModel->getPages();
-			$no_of_records_per_page = 5;
-			$total_pages = ceil($pages / $no_of_records_per_page);
+			if ($pages == 0) {
+				$no_of_records_per_page = 0;
+			} else {
+				$no_of_records_per_page = 5;
+			}
+			$total_pages = ($pages == 0) ? 0 : ceil($pages / $no_of_records_per_page);
 
 			if (empty($pageno) || !is_numeric($pageno)) {
 				$pageno = 1;
@@ -19,7 +23,7 @@
 			}
 
 			$offset = ($pageno-1) * $no_of_records_per_page; 
-			
+
 			$images = $this->galleryModel->getImages($offset, $no_of_records_per_page);
 			
 			$data = [

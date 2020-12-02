@@ -59,8 +59,12 @@
 	width: 100%;
   }
 
-  #photo input:focus {
-	  border: 2vmin violet;
+	#photo input:focus {
+		border-color: 2vmin violet;
+	}
+	
+  .highlight {
+	border-color: 2vmin violet;
   }
   
   #canvas {
@@ -109,7 +113,6 @@
 
   #stickerCanvas:hover {
 	cursor: pointer;
-	color: rgb(0, 191, 255);
   }
 
   .disabled {

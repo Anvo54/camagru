@@ -17,6 +17,8 @@ var selected_image = null;
 var droparea = null;
 var selected_file = null;
 var fileInput = null;
+
+
 var reader = new FileReader
 
 var tree = false;
@@ -27,6 +29,7 @@ var cape = false;
 var facemask = false;
 var streaming = false;
 var cam = null;
+var overlay = null;
 
 droparea = document.getElementById('stickerCanvas')
 video = document.getElementById('video');
@@ -44,9 +47,10 @@ capeSticker = document.getElementById('cape');
 faceMaskSticker = document.getElementById('facemask');
 cam = document.getElementById('cam');
 fileInput = document.createElement('input');
-let overlay = document.getElementById('message');
+
 
 startbutton.disabled = true;
+cam.disabled = true;
 uploaderText.style.display = 'none';
 
 fileInput.type = 'file';
@@ -90,6 +94,10 @@ const clearTempCanvas = () => {
 	var context = temp_canvas.getContext('2d');
 	context.fillStyle = "#AAA";
 	context.fillRect(0, 0, temp_canvas.width, temp_canvas.height);
+	context.fillStyle = "black";
+	context.font = 15+"pt Courier ";
+	context.fillText("Drag and drop Here", width / 3, height / 2);
+	context.fillText("Or Click to browse files", width / 3, height / 1.5);
 	startbutton.disabled = true;
 }
 
@@ -119,10 +127,10 @@ const dropHandler = (event) => {
 const startDisable = () => {
 	if (cam.checked == false && selected_file)
 		startbutton.disabled = false;
-	else if (!star && !garden && !tree && !chain && !cape && !facemask)
-		startbutton.disabled = true;
-	else
+	else if (cam.checked == true && (star || garden || tree || chain || cape || facemask))
 		startbutton.disabled = false;
+	else
+		startbutton.disabled = true;
 }
 
 startbutton.addEventListener('click', (ev) => {
@@ -176,20 +184,21 @@ cam.addEventListener('change', event => {
 })
 
 droparea.addEventListener('mouseover', event => {
-	overlay.style.display = 'block';
-	console.log(event);
+	overlay = true;
+})
+
+droparea.addEventListener('mouseout', event => {
+	overlay = false;
 })
 
 navigator.mediaDevices.getUserMedia({video: true, audio: false})
 	.then(function(stream) {
 	video.srcObject = stream;
-	cam.checked = true;
 	video.play();
 	})
 	.catch(function(err) {
 		cam.checked = false;
 		cam.disabled = true;
-		overlay.style.display = 'block';
 		manipulateCanvas();
 		console.log("An error occurred: " + err);
 	});
@@ -209,6 +218,8 @@ video.addEventListener('canplay', function(ev){
 	temp_canvas.setAttribute('width', width);
 	temp_canvas.setAttribute('height', height);
 	streaming = true;
+	cam.checked = true;
+	cam.disabled = false;
 	manipulateCanvas()
 	}
 }, false);
@@ -239,6 +250,16 @@ const manipulateCanvas = () => {
 			c_tmp.drawImage(chainSticker, 0,0);
 		if (facemask)
 			c_tmp.drawImage(faceMaskSticker, 0,0);
+		if (overlay){
+			c_tmp.globalAlpha = 0.7;
+			c_tmp.fillStyle = 'rgba(238, 130, 238, 1)';
+			c_tmp.fillRect(0,0, width, height);
+			c_tmp.globalAlpha = 1;
+			c_tmp.fillStyle = "black";
+			c_tmp.font = 15+"pt Courier ";
+			c_tmp.fillText("Drag and drop Here", width / 3, height / 2);
+			c_tmp.fillText("Or Click to browse files", width / 3, height / 1.5);
+		}
 	},16);
 }
 

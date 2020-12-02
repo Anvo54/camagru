@@ -20,7 +20,6 @@
 		<div class="row justify-content-center" ondrop="dropHandler(event);" ondragover="dragOverHandler(event);">
 			<div>
 				<canvas id='stickerCanvas'></canvas>
-				<div id="message" class="message">Drag and drop your image here or click to upload</div>
 			</div>
 		</div>
 		<div class="row">
