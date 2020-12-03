@@ -1,11 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Raleway&display=swap');
 
-.grey-box-bg {
-	background-color: rgb(100, 100, 100);
-	display: grid;
-	place-items: center;
-}
-
 .logo:hover {
 	padding: 0%;
 	background-color: violet;
@@ -36,55 +30,59 @@
 
 .nav-item:active {
 	background-color: #5D9FD4;
-  }
+}
 
-  #video {
+@media screen and (max-width: 535px) {
+	.nav-links {
+		font-family: 'Courier New', Courier, monospace;
+		list-style: none;
+		display: inline;
+		left: 70%;
+		position: relative;
+	}
+
+	.logo {
+		top: 10px;
+		position: absolute
+	}
+}
+
+
+#video {
 	display: none;
-	border-radius: 1%;
-	width:inherit;
-	height:inherit;
-	max-width: 640px;
-  }
+}
 
-  #photo {
+#photo {
 	justify-content: center;
 	display: grid;
 	width: 100%;
 	grid-template-columns: repeat(5, 1fr);
 	grid-gap: 1vmin;
-  }
-  
-  #photo input {
+}
+
+#photo input {
 	border-radius: 1%;
 	width: 100%;
-  }
+}
 
-	#photo input:focus {
-		border-color: 2vmin violet;
-	}
-	
-  .highlight {
+#photo input:focus {
 	border-color: 2vmin violet;
-  }
-  
-  #canvas {
+}
+
+#canvas {
 	display:none;
-  }
+}
 
-  .contentarea {
-	font-size: 16px;
-	width: 760px;
-  }
-
-  .main {
+.main {
 	min-height: 100%;
 	margin-bottom: 3vh;
-  }
-  .push {
-	height: 6vh;
-  }
+}
 
-  .footer {
+.push {
+	height: 6vh;
+}
+
+.footer {
 	padding-top: 5%;
 	bottom: 0;
 	position: fixed;
@@ -92,32 +90,32 @@
 	left: 0;
 	background-color: #e9ecef;
 	z-index: 20;
-  }
+}
 
-  .stickers {
+.stickers {
 	height: 15vmin;
-  }
+}
 
-  .stickers:hover {
+.stickers:hover {
 	  cursor: pointer;
-  }
+}
 
-  #stickerCanvas {
+#stickerCanvas {
 	border-radius: 1%;
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
 	width: 100%;
 	z-index: 10;
-  }
+}
 
-  #stickerCanvas:hover {
+#stickerCanvas:hover {
 	cursor: pointer;
-  }
+}
 
-  .disabled {
+.disabled {
 	color: currentColor;
 	cursor: not-allowed;
 	opacity: 0.5;
 	text-decoration: none;
-  }
+}
