@@ -365,6 +365,8 @@
 				} else {
 					redirect('users/register');
 				}
+			} else {
+				redirect('');
 			}
 		}
 	}

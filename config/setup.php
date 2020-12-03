@@ -3,7 +3,7 @@
 	ini_set('display_startup_errors', 1);
 	error_reporting(E_ALL);
 	require 'config.php';
-	require '../app/libraries/Database.php';
+	require 'Database.php';
 	require 'install.php';
 ?>
 

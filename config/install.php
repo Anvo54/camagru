@@ -43,7 +43,7 @@ require_once '../app/helpers/session_helper.php';
 				$db->query('INSERT INTO `images` (`image_id`, `image_title`, `image_desc`, `image_path`, `user_id`) VALUES (NULL, :image_title, :image_desc, :image_path, :user_id)');
 				$db->bind(':image_title', 'image no '.$j);
 				$db->bind(':image_desc', 'This is a image from user'.$j);
-				$db->bind(':image_path', 'https://picsum.photos/id/1'.$i.'/600/500');
+				$db->bind(':image_path', URLROOT.'/public/img/placeholder.png');
 				$db->bind(':user_id', $j);
 				$db->execute();
 				$j = ($i % 3 != 2) ? $j : $j += 1; 
