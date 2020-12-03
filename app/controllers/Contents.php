@@ -79,6 +79,9 @@
 					$sec_img = imagecreatefrompng('public/img/Stickers/face_mask.png');
 					imagecopy($img, $sec_img,0,0,0,0,imageSX($sec_img),imageSY($sec_img));
 				}
+				imagealphablending( $img, false );
+				imagesavealpha( $img, true );
+
 				imagepng($img, $data['filename']);
 				echo URLROOT.'/'.$data['filename'];
 			}

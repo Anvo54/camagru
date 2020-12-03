@@ -20,7 +20,6 @@ var fileInput = null;
 
 
 var reader = new FileReader
-
 var tree = false;
 var garden = false;
 var star = false;
@@ -93,11 +92,13 @@ const clearTempCanvas = () => {
 	temp_canvas.setAttribute('height', height);
 	var context = temp_canvas.getContext('2d');
 	context.fillStyle = "#AAA";
-	context.fillRect(0, 0, temp_canvas.width, temp_canvas.height);
-	context.fillStyle = "black";
-	context.font = 15+"pt Courier ";
-	context.fillText("Drag and drop Here", width / 3, height / 2);
-	context.fillText("Or Click to browse files", width / 3, height / 1.5);
+	if (!selected_file) {
+		context.fillRect(0, 0, temp_canvas.width, temp_canvas.height);
+		context.fillStyle = "black";
+		context.font = 15+"pt Courier ";
+		context.fillText("Drag and drop Here", width / 3, height / 2);
+		context.fillText("Or Click to browse files", width / 3, height / 1.5);
+	}
 	startbutton.disabled = true;
 }
 
@@ -188,6 +189,7 @@ droparea.addEventListener('mouseover', event => {
 
 droparea.addEventListener('mouseout', event => {
 	overlay = false;
+	clearTempCanvas();
 })
 
 navigator.mediaDevices.getUserMedia({video: true, audio: false})
@@ -306,7 +308,6 @@ const takepicture = () => {
 		};
 		oReq.open("POST", 'add_temp_photo')
 		oReq.send(formData);
-		selected_file = null;
 		clearTempCanvas();
 		startDisable();
 		uploaderText.style.display = 'block';
