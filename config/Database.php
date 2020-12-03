@@ -7,6 +7,7 @@
 	 * Bind values
 	 * Return rows and results
 	 */
+	require_once 'setup.php';
 
 	 Class Database {
 		 private $host = DB_HOST;
@@ -30,6 +31,20 @@
 			try {
 				$this->dbh = new PDO($dsn, $this->user, $this->pass, $options);
 			} catch (PDOException $e) {
+				if ($e->getCode() == 1049) {
+					try {
+						$dsn = 'mysql:host='.$this->host;
+						$this->dbh = new PDO($dsn, $this->user, $this->pass, $options);
+						$this->dbh->query('CREATE DATABASE IF NOT EXISTS '.$this->dbname);
+						$this->dbh->query('USE '.$this->dbname);
+						$install = new Install();
+						$install->createTables();
+						redirect('');
+					} catch (PDOException $e) {
+						$this->error = $e->getMessage();
+						echo $this->error;
+					}
+				}
 				$this->error = $e->getMessage();
 				echo $this->error;
 			}

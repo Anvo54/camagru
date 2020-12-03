@@ -1,37 +1,31 @@
 <?php
-	ini_set('display_errors', 1);
-	ini_set('display_startup_errors', 1);
-	error_reporting(E_ALL);
-	require 'config.php';
-	require 'Database.php';
-	require 'install.php';
-?>
+require_once 'app/helpers/session_helper.php';
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Camagru Setup</title>
-	<link rel="shortcut icon" href="../public/img/icons/favicon_setup.ico" />
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
-</head>
-<body>
-	<div class="container">
-		<nav class="navbar navbar-light bg-light">
-			<img src="../public/img/logo/Camagru_logo.svg" width="auto" height="30" alt="">
-		</nav>
-		<div class="jumbotron bg-light">
-			<h3>Welcome to Camagru install wizard</h3>
-			<br>
-			<p class="alert alert-danger">THIS SCRIPT WILL REMOVE ALL PREVIOUS DATA FROM CAMAGRU DATABASE</p>
-			<form action="install.php" method="post">
-			
-			<input type="checkbox" name="sample-data" value="false"> Install sample data?
-				<br>
-			<input type="submit" value="Install" class="btn btn-success">
-		</form>
-		</div>
-	</div>
-</body>
-</html>
+class Install {
+		public function __construct() {
+			if (isLoggedIn()){
+				unset($_SESSION['user_id']);
+				unset($_SESSION['user_name']);
+				session_destroy();
+			}
+		}
+
+		public function createTables()
+		{
+			$db = new Database;
+			$db->query('DROP TABLE IF EXISTS `users`, `comments`, `image_likes`, `images`');
+			$db->execute();
+			echo "Creating user table<br>";
+			$db->query('CREATE TABLE `users` (`user_id` INT NOT NULL AUTO_INCREMENT,`user_name` varchar(32) NOT NULL,`user_email` varchar(64) NOT NULL,`password` varchar(255) NOT NULL,`link` varchar(32) DEFAULT NULL,`verified` tinyint(1) DEFAULT NULL, `comment_email` tinyint(1) DEFAULT NULL, `like_email` tinyint(1) DEFAULT NULL, PRIMARY KEY (`user_id`))');
+			$db->execute();
+			echo "Creating comments table<br>";
+			$db->query('CREATE TABLE `comments` ( `id` INT NOT NULL AUTO_INCREMENT , `post_id` INT NOT NULL , `user_id` INT NOT NULL , `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP , `comment` TEXT NOT NULL , PRIMARY KEY (`id`))');
+			$db->execute();
+			echo "Creating likes table<br>";
+			$db->query('CREATE TABLE `image_likes` ( `id` INT NOT NULL AUTO_INCREMENT , `image_id` INT NOT NULL , `user_id` INT NOT NULL , PRIMARY KEY (`id`))');
+			$db->execute();
+			echo "Creating images table<br>";
+			$db->query('CREATE TABLE `images` (`image_id` int NOT NULL AUTO_INCREMENT, `image_title` varchar(255) NOT NULL, `image_desc` varchar(255) NOT NULL,`image_path` varchar(255) NOT NULL, `user_id` int DEFAULT NULL, `created_at` datetime DEFAULT CURRENT_TIMESTAMP, PRIMARY KEY (`image_id`))');
+			$db->execute();
+		}
+	}

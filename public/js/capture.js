@@ -99,7 +99,7 @@ const clearTempCanvas = () => {
 		context.fillText("Drag and drop Here", width / 3, height / 2);
 		context.fillText("Or Click to browse files", width / 3, height / 1.5);
 	}
-	startbutton.disabled = true;
+	startDisable();
 }
 
 const dropHandler = (event) => {
