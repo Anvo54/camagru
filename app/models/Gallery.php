@@ -72,6 +72,16 @@
 			return $row;
 		}
 
+		public function getImagesByUser($user)
+		{
+			$this->db->query('SELECT * FROM images WHERE user_id = :user_id');
+			$this->db->bind(':user_id', $user);
+
+			$result = $this->db->resultSet();
+
+			return $result;
+		}
+
 		public function deleteImage($id)
 		{
 			$this->db->query('DELETE FROM images WHERE image_id = :image_id');

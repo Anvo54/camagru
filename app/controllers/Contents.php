@@ -110,12 +110,14 @@
 						$this->view('contents/add', $data);
 					}
 				}
+				$user_images = $this->galleryModel->getImagesByUser($_SESSION['user_id']);
 				$data = [
 					'name' => '',
 					'name_err' => '',
 					'description' => '',
 					'description_err' => '',
-					'error_message' => ''
+					'error_message' => '',
+					'user_images' => $user_images
 				];
 				$this->view('contents/add', $data);
 			} else {
@@ -132,9 +134,8 @@
 						redirect('contents');
 					}
 					if ($this->galleryModel->deleteImage($id)){
-						$path = explode('http://localhost:8080/camagru/',$image->image_path);
+						$path = explode('http://localhost:8080/',$image->image_path);
 						unlink($path[1], null);
-						redirect('contents');
 					} else {
 						die('Something went wrong');
 					}

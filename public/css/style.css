@@ -119,3 +119,40 @@
 	opacity: 0.5;
 	text-decoration: none;
 }
+
+.prevPhotos{
+	display: grid;
+	grid-template-columns: repeat(5, 1fr);
+	grid-gap: 1vmin;
+}
+
+.img-container {
+	height: 15vmin;
+	position: relative;
+}
+
+.prevPhotoDelete{
+	position: absolute;
+	top: 10%;
+	left: 0%;
+	transform: translate(-50%, -50%);
+	-ms-transform: translate(-50%, -50%);
+	background-color: rgb(190, 57, 57);
+	color: rgb(22, 22, 22);
+	font-size: 1vmin;
+	padding: 2vmin;
+	opacity: 0;
+	transition: .5s ease;
+	border: none;
+	border-radius: 2px;
+	text-align: center;
+}
+.prevPhotos:hover .prevPhotoDelete{
+	cursor: pointer;
+	opacity: 1;
+}
+
+.prevImage {
+	height: 15vmin;
+	width: auto;
+}

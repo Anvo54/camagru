@@ -49,6 +49,19 @@
 			</div>
 		</div>
 		</form>
+		<div>
+			<h4>Previous photos</h4>
+			<div class="prevPhotos">
+				<?php foreach ($data['user_images'] as $image): ?>
+					<div class="img-container">
+						<img src="<?php echo $image->image_path;?>" class="prevImage">
+						<form action="<?php echo URLROOT; ?>/contents/delete/<?php echo $image->image_id ?>" method="post">
+							<input type="submit" value="Delete" class="prevPhotoDelete">
+						</form>
+					</div>
+				<?php endforeach;?>
+			</div>
+		</div>
 	</div>
 </div>
 <script src="<?php echo URLROOT; ?>/public/js/capture.js"></script>
