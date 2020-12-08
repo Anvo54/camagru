@@ -134,8 +134,9 @@
 						redirect('contents');
 					}
 					if ($this->galleryModel->deleteImage($id)){
-						$path = explode('http://localhost:8080/',$image->image_path);
-						unlink($path[1], null);
+						$path = explode(URLROOT.'/',$image->image_path);
+						unlink($path[1]);
+						redirect('');
 					} else {
 						die('Something went wrong');
 					}
