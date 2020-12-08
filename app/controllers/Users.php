@@ -338,8 +338,9 @@
 					} else {
 						die('Something went wrong');
 					}
+				} else {
+					$this->view('users/reset', $data);
 				}
-				
 			}
 			$data = [
 				'link' => $id,
