@@ -130,6 +130,9 @@
 			if (empty($data['user_name'])){
 				$data['name_err'] = 'Please insert valid username!';
 			}
+			if ($this->userModel->findUserByUsername($data['user_name'])){
+				$data['name_err'] = 'Username already taken';
+			}
 			if (empty($data['email'])){
 				$data['email_err'] = 'Please insert valid email!';
 			} else if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
