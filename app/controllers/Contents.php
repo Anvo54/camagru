@@ -12,9 +12,9 @@
 			} else {
 				$no_of_records_per_page = 5;
 			}
-			$total_pages = ($pages == 0) ? 0 : ceil($pages / $no_of_records_per_page);
+			$total_pages = ($pages <= 0) ? 0 : ceil($pages / $no_of_records_per_page);
 
-			if (empty($pageno) || !is_numeric($pageno)) {
+			if (empty($pageno) || !is_numeric($pageno) || $pageno <= 0) {
 				$pageno = 1;
 			}
 
