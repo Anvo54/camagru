@@ -220,6 +220,7 @@ video.addEventListener('canplay', function(ev){
 	temp_canvas.setAttribute('height', height);
 	streaming = true;
 	cam.checked = true;
+	cam.disabled = false;
 	startDisable();
 	manipulateCanvas()
 	}
