@@ -6,7 +6,7 @@
 			<form action="<?php echo URLROOT;?>/users/forgot" method="post">
 				<div class="form-group">
 					<label for="user_name">User name: <sup>*</sup> </label>
-					<input type="text" name="user_name" class="form-control form-control-lg <?php echo (!empty($data['name_err'])) ? 'is-invalid' : ''; ?>" value="<?php $data['user_name'];?>">
+					<input type="text" name="user_name"  maxlength="32" class="form-control form-control-lg <?php echo (!empty($data['name_err'])) ? 'is-invalid' : ''; ?>" value="<?php $data['user_name'];?> ">
 					<span class="invalid-feedback"><?php echo $data['name_err'];?></span>
 				</div>
 				<div class="row">

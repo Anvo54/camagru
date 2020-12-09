@@ -37,7 +37,7 @@
 				<div class="row float-right">
 					<form action="<?php echo URLROOT ?>/contents/delcomment/<?php echo $comment->id; ?>" method="post">
 						<input type="hidden" name="image_id" value="<?php echo $data['image']->image_id; ?>">
-						<input type="hidden" name="user_id" value="<?php echo $data['user']->user_id; ?>">
+						<input type="hidden" name="user_id" value="<?php echo $comment->user_id; ?>">
 						<br>
 						<input type="submit" value="Delete comment" class="btn btn-danger btn-sm">
 					</form>

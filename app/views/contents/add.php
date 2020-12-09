@@ -37,11 +37,11 @@
 		<canvas id="canvas"></canvas>
 		<div class="form-group">
 				<label for="name">Name: <sup>*</sup> </label>
-				<input type="text" name="image_title" class="form-control form-control-lg" required>
+				<input type="text" name="image_title" class="form-control form-control-lg" maxlength="32" required>
 			</div>
 			<div class="form-group">
 				<label for="description">Description: <sup>*</sup> </label>
-				<input type="text" name="image_desc" class="form-control form-control-lg" required>
+				<input type="text" name="image_desc" class="form-control form-control-lg" maxlength="128" required>
 			</div>
 			<div class="row">
 			<div class="output col">

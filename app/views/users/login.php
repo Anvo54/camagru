@@ -6,12 +6,12 @@
 			<form action="<?php echo URLROOT;?>/users/login" method="post">
 				<div class="form-group">
 					<label for="user_name">User name: <sup>*</sup> </label>
-					<input type="text" name="user_name" class="form-control form-control-lg <?php echo (!empty($data['name_err'])) ? 'is-invalid' : ''; ?>" value="<?php $data['user_name'];?>">
+					<input type="text" name="user_name" maxlength="32" class="form-control form-control-lg <?php echo (!empty($data['name_err'])) ? 'is-invalid' : ''; ?>" value="<?php $data['user_name'];?>">
 					<span class="invalid-feedback"><?php echo $data['name_err'];?></span>
 				</div>
 				<div class="form-group">
 					<label for="password">Password: <sup>*</sup> </label>
-					<input type="password" name="password" class="form-control form-control-lg <?php echo (!empty($data['password_err'])) ? 'is-invalid' : ''; ?>" value="<?php $data['password'];?>">
+					<input type="password" name="password" maxlength="32" class="form-control form-control-lg <?php echo (!empty($data['password_err'])) ? 'is-invalid' : ''; ?>" value="<?php $data['password'];?>">
 					<span class="invalid-feedback"><?php echo $data['password_err'];?></span>
 				</div>
 				<div class="row">

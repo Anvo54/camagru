@@ -13,19 +13,19 @@
 			<form action="<?php echo URLROOT;?>/users/edit/<?php echo $_SESSION['user_id'] ?>" method="post">
 				<div class="form-group">
 					<label for="user_name">User name: <sup>*</sup> </label>
-					<input type="text" name="user_name" class="form-control form-control-lg" required value="<?php echo $data['user']->user_name;?>">
+					<input type="text" name="user_name" class="form-control form-control-lg" maxlength="32" required value="<?php echo $data['user']->user_name;?>">
 				</div>
 				<div class="form-group">
 					<label for="email">Email: <sup>*</sup> </label>
-					<input type="email" name="email" class="form-control form-control-lg" value="<?php echo $data['user']->user_email;?>" required>
+					<input type="email" name="email" class="form-control form-control-lg" maxlength="64" value="<?php echo $data['user']->user_email;?>" required>
 				</div>
 				<div class="form-group">
 					<label for="password">Old Password: <sup>*</sup> </label>
-					<input type="password" name="password" class="form-control form-control-lg>" required minlength="6">
+					<input type="password" name="password" class="form-control form-control-lg>" required minlength="6" maxlength="32">
 				</div>	
 				<div class="form-group">
 					<label for="confirm_password">New Password: <sup>*</sup> </label>
-					<input type="password" name="new_password" class="form-control form-control-lg" required minlength="6">
+					<input type="password" name="new_password" class="form-control form-control-lg" required minlength="6" maxlength="32">
 				</div>
 				<div class="form-group">
 					<div class="row">
