@@ -128,7 +128,7 @@ const dropHandler = (event) => {
 const startDisable = () => {
 	if (cam.checked == false && selected_file)
 		startbutton.disabled = false;
-	else if (star || garden || tree || chain || cape || facemask || cam.checked)
+	else if ((star || garden || tree || chain || cape || facemask) && cam.checked)
 		startbutton.disabled = false;
 	else
 		startbutton.disabled = true;
@@ -220,7 +220,6 @@ video.addEventListener('canplay', function(ev){
 	temp_canvas.setAttribute('height', height);
 	streaming = true;
 	cam.checked = true;
-	cam.disabled = false;
 	startDisable();
 	manipulateCanvas()
 	}
