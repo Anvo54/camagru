@@ -130,7 +130,7 @@
 
 			$row =  $this->db->single();
 
-			if ($row) {
+			if ($row == "1") {
 				return true;
 			} else {
 				return false;
